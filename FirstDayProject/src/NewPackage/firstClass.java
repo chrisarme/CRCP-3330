@@ -1,5 +1,5 @@
 package NewPackage;
-//import processing.core.*;
+import processing.core.*;
 
 
 public class firstClass //extends PApplet 
@@ -9,6 +9,7 @@ public class firstClass //extends PApplet
 	{
 		// TODO Auto-generated method stub
 		System.out.println("Hello World");
+		PApplet.main()
 	}
 
 }
