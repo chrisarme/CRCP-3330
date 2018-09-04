@@ -15,6 +15,11 @@ public class HelloWorld extends PApplet
 	MelodyPlayer player;
 	MidiFileToNotes midiNotes;
 	
+	ProbabilityListGenerator<Integer> pitchGenerator = new ProbabilityListGenerator<Integer>();
+	ProbabilityListGenerator<Double> rhythmGenerator = new ProbabilityListGenerator<Double>();
+	
+	//ProbabilityListGenerator<MidiFileToNotes> probablityGenerator; 
+	
 	public static void main(String[] args) 
 	{
 		// TODO Auto-generated method stub
@@ -29,7 +34,7 @@ public class HelloWorld extends PApplet
 	
 	public void setup()
 	{
-		String path = getPath("../mid/la_cumparsita.mid");
+		String path = getPath("../mid/MaryHadALittleLamb.mid");
 		
 		//println(path);
 		
@@ -37,6 +42,12 @@ public class HelloWorld extends PApplet
 		midiNotes = new MidiFileToNotes(path);
 		midiNotes.setWhichLine(0); // change which channel we are grabbing notes from
 		midiNotes.processPitchesAsTokens();
+		
+		pitchGenerator.train(midiNotes.getPitchArray());
+		rhythmGenerator.train(midiNotes.getRhythmArray());
+		
+		pitchGenerator.testData();
+		rhythmGenerator.testData();
 		
 		player = new MelodyPlayer(this, 100f);
 		player.setup();

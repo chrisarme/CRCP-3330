@@ -49,7 +49,7 @@ public class MelodyPlayer {
 	//list the midi devices -- choosing IAC bus (for mac/OS X) so can send to an external program (eg DAW/sampler)
 	void setupMidi() {
 		MidiBus.list(); // display all ports
-		outputMidiBus = new MidiBus(this, "Real Time Sequencer", "Microsoft GS Wavetable Synth");
+		outputMidiBus = new MidiBus(this, "loopMIDI Port", "loopMIDI Port");
 	}
 
 	void setBPM(float tempo) {
