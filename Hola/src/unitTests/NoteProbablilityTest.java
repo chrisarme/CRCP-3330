@@ -1,3 +1,7 @@
+// Chris Arme
+// This outputs the probability of data appearing based on whatever was passed in
+// In this case, it is based off of "Mary Had A Little Lamb"
+
 package unitTests;
 
 import java.io.UnsupportedEncodingException;

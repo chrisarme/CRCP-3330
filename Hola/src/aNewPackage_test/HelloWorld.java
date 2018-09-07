@@ -1,3 +1,6 @@
+// Chris Arme
+// Main Class
+
 package aNewPackage_test;
 
 import processing.core.*;
@@ -97,6 +100,7 @@ public class HelloWorld extends PApplet
 	
 	public void draw()
 	{	
+		// display only
 		background(150);
 		
 		fill(255);

@@ -1,3 +1,7 @@
+// Chris Arme
+// This tests what the probability of the generated pitches and rhythms are after 10,000 loops
+// WARNING: THIS DOESN'T WORK DO TO THE PROCESSING POWER ACTUALLY NEEDED TO DO IT
+
 package unitTests;
 
 import java.io.UnsupportedEncodingException;

@@ -1,3 +1,8 @@
+// Chris Arme
+// The bread and butter of this project
+// This reads all the data that is pass into it and creates a list of possible data to choose from
+// It then generates a random data set based off of the possible data to choose from and their probablility
+
 package aNewPackage_test;
 
 import java.sql.Array;

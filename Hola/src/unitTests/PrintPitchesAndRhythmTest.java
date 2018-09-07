@@ -1,3 +1,6 @@
+// Chris Arme
+// This prints the pitches and rhythms that are generated
+
 package unitTests;
 
 import java.io.UnsupportedEncodingException;
