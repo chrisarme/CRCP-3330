@@ -2,6 +2,7 @@ package unitTests;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 
 import aNewPackage_test.MelodyPlayer;
 
@@ -11,7 +12,7 @@ import processing.core.PApplet;
 
 //import processing.core.*;
 
-public class NoteProbablilityTest
+public class MassGeneratingDataAndProbablilityTest
 {	
 	MelodyPlayer player;
 	MidiFileToNotes midiNotes;
@@ -35,11 +36,24 @@ public class NoteProbablilityTest
 		midiNotes.setWhichLine(0); // change which channel we are grabbing notes from
 		midiNotes.processPitchesAsTokens();
 		
-		pitchGenerator.train(midiNotes.getPitchArray());
-		rhythmGenerator.train(midiNotes.getRhythmArray());
+		ArrayList<Integer> currentPitchArray = midiNotes.getPitchArray();
+		ArrayList<Double> currentRhythmArray = midiNotes.getRhythmArray();
 		
-		pitchGenerator.printProbability();
-		rhythmGenerator.printProbability();
+		for (int i = 0; i < 10000; i++)
+		{
+			pitchGenerator.train(currentPitchArray);
+			rhythmGenerator.train(currentRhythmArray);
+			
+			pitchGenerator.generate(20);
+			rhythmGenerator.generate(20);
+			
+			currentPitchArray = pitchGenerator.returnGeneratedArray();
+			currentRhythmArray = rhythmGenerator.returnGeneratedArray();
+		}
+		System.out.println("Pitches: ");
+		pitchGenerator.printPitchesAndRhythm();
+		System.out.println('\n' + "Rhythm: ");
+		rhythmGenerator.printPitchesAndRhythm();
 	}
 	
 	String getPath(String filename)

@@ -1,6 +1,9 @@
 package aNewPackage_test;
 
 import processing.core.*;
+import unitTests.MassGeneratingDataAndProbablilityTest;
+import unitTests.NoteProbablilityTest;
+import unitTests.PrintPitchesAndRhythmTest;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -11,7 +14,7 @@ import jm.music.data.Score;
 
 public class HelloWorld extends PApplet
 {
-	int generationAmount = 50;
+	static int generationAmount = 50;
 	boolean playMusic = false;
 	
 	//float x = 150;
@@ -20,6 +23,10 @@ public class HelloWorld extends PApplet
 	
 	ProbabilityListGenerator<Integer> pitchGenerator = new ProbabilityListGenerator<Integer>();
 	ProbabilityListGenerator<Double> rhythmGenerator = new ProbabilityListGenerator<Double>();
+	
+	NoteProbablilityTest noteProbTest = new NoteProbablilityTest();
+	PrintPitchesAndRhythmTest pitchAndRhythmTest = new PrintPitchesAndRhythmTest();
+	MassGeneratingDataAndProbablilityTest massGenerationAndProbTest = new MassGeneratingDataAndProbablilityTest();
 	
 	//ProbabilityListGenerator<MidiFileToNotes> probablityGenerator; 
 	
@@ -97,6 +104,16 @@ public class HelloWorld extends PApplet
 		
 		text("Press Space to Start/Stop Music", (width / 2) - textWidth("Press Space to Start/Stop Music") / 2, 50);
 		
+		textSize(18);
+		text ("Press 1 for NoteProbablilityTest (Unit Test 1)", (width / 2) - textWidth("Press 1 for NoteProbablilityTest (Unit Test 1)") / 2, 400);
+		text ("Press 2 for PrintPitchesAndRhythmTest (Unit Test 2)", (width / 2) - textWidth("Press 2 for PrintPitchesAndRhythmTest (Unit Test 2)") / 2, 440);
+		text ("Press 3 for MassGeneratingDataAndProbabliltyTest (Unit Test 3)", (width / 2) - textWidth("Press 3 for MassGeneratingDataAndProbabliltyTest (Unit Test 3)") / 2, 480);
+		
+		textSize(15);
+		fill(220, 0, 0);
+		text("WARNING: UNIT TEST 3 WILL CAUSE ECLIPSE TO THROW AN ERROR", (width / 2) - textWidth("WARNING: UNIT TEST 3 WILL CAUSE ECLIPSE TO THROW AN ERROR") / 2, 500);
+		
+		fill(255);
 		textSize(40);
 		
 		if (playMusic == true)
@@ -126,6 +143,19 @@ public class HelloWorld extends PApplet
 			{
 				playMusic = true;
 			}
+		}
+		
+		if (key == '1')
+		{
+			noteProbTest.actualTest();
+		}
+		else if (key == '2')
+		{
+			pitchAndRhythmTest.actualTest();
+		}
+		else if (key == '3')
+		{
+			massGenerationAndProbTest.actualTest();
 		}
 	}
 }

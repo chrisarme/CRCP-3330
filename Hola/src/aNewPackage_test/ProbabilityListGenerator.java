@@ -8,14 +8,14 @@ public class ProbabilityListGenerator <E>
 {
 	ArrayList<E> dataset;
 	
-	//ArrayList<E> dataList = new ArrayList<E>(); 
+	ArrayList<E> dataList = new ArrayList<E>(); 
 	ArrayList<E> repeatedDataList = new ArrayList<E>();
-	//ArrayList<Integer> dataTimesRepeated = new ArrayList<Integer>();
-	//ArrayList<Double> dataChanceToAppear = new ArrayList<Double>();
+	ArrayList<Integer> dataTimesRepeated = new ArrayList<Integer>();
+	ArrayList<Double> dataChanceToAppear = new ArrayList<Double>();
 	
 	ArrayList<E> generatedData = new ArrayList<E>();
 	
-	void train(ArrayList<E> newDataSet)
+	public void train(ArrayList<E> newDataSet)
 	{
 		dataset = newDataSet;
 		
@@ -25,41 +25,49 @@ public class ProbabilityListGenerator <E>
 			if (Double.parseDouble(dataString) > 0)
 			{
 				repeatedDataList.add(data);
+				
+				int index = dataList.indexOf(data);
+				
+				//System.out.println(index);
+				
+				if (index == -1)
+				{
+					dataList.add(data);
+					dataTimesRepeated.add(1);
+				}
+				else
+				{
+					dataTimesRepeated.set(index, dataTimesRepeated.get(index) + 1);
+				}
 			}
 			
-			/*int index = dataList.indexOf(data);
 			
-			if (index == -1)
-			{
-				dataList.add(data);
-				dataTimesRepeated.add(1);
-			}
-			else
-			{
-				dataTimesRepeated.set(index, dataTimesRepeated.get(index) + 1);
-			}*/
 			//System.out.println(String.valueOf(data));
 		}
 		
+		// START this is just for test data
+		
+				int timesRepeated = 0;
+				
+				for (int i = 0; i < dataTimesRepeated.size(); i++)
+				{
+					timesRepeated += dataTimesRepeated.get(i);
+				}
+
+				for (int i = 0; i < dataTimesRepeated.size(); i++)
+				{
+					dataChanceToAppear.add((double) dataTimesRepeated.get(i) / timesRepeated);
+				}
+				
+				//System.out.println("Size: " + dataTimesRepeated.size());
+				//System.out.println(timesRepeated);
+				
+				// END TEST
+		
 	}
 	
-	void generate(int sizeOfGeneration)
-	{
-		//int timesRepeated = 0;
-		
-		//for (int i = 0; i < dataTimesRepeated.size(); i++)
-		//{
-			//timesRepeated += dataTimesRepeated.get(i);
-		//}
-
-		//for (int i = 0; i < dataTimesRepeated.size(); i++)
-		//{
-			//dataChanceToAppear.add((double) dataTimesRepeated.get(i) / timesRepeated);
-		//}
-		
-		//System.out.println("Size: " + dataTimesRepeated.size());
-		//System.out.println(timesRepeated);
-		
+	public void generate(int sizeOfGeneration)
+	{	
 		for (int i = 0; i < sizeOfGeneration; i++)
 		{
 			double randomNum = (Math.random() * (repeatedDataList.size()));
@@ -70,18 +78,32 @@ public class ProbabilityListGenerator <E>
 		}
 	}
 	
-	ArrayList<E> returnGeneratedArray()
+	public ArrayList<E> returnGeneratedArray()
 	{
 		return generatedData;
 	}
 	
-	/*void testData()
+	public void printProbability()
 	{
-		System.out.println("----------TEST DATA----------");
+		System.out.println("-----UNIT TEST DATA START-----");
+		
 		for (int i = 0; i < dataList.size(); i++)
 		{
-			System.out.println(String.valueOf(dataList.get(i) + "   " + dataTimesRepeated.get(i)));
+			System.out.println("Data: " + dataList.get(i) + " | Chance to appear: " + dataChanceToAppear.get(i));
 		}
-		System.out.println("----------END  DATA----------");
-	}*/
+		
+		System.out.println("------UNIT TEST DATA END------");
+	}
+	
+	public void printPitchesAndRhythm()
+	{
+		System.out.println("-----UNIT TEST DATA START-----");
+		
+		for (int i = 0; i < generatedData.size(); i++)
+		{
+			System.out.print(generatedData.get(i) + " ");
+		}
+		
+		System.out.println('\n' + "------UNIT TEST DATA END------");
+	}
 }

@@ -13,7 +13,7 @@ public class MidiFileToNotes {
 
 	ArrayList<jm.music.data.Note> melody;
 
-	MidiFileToNotes(String f) {
+	public MidiFileToNotes(String f) {
 		filename = f;
 		processPitchesAsTokens();
 		whichLine = 0;
@@ -25,11 +25,11 @@ public class MidiFileToNotes {
 		whichLine = w;
 	}
 
-	void setWhichLine(int line) {
+	public void setWhichLine(int line) {
 		whichLine = line;
 	}
 
-	void processPitchesAsTokens() {
+	public void processPitchesAsTokens() {
 		pitches = new ArrayList();
 		melody = new ArrayList();
 		rhythms = new ArrayList();

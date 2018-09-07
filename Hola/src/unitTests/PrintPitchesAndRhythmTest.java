@@ -11,7 +11,7 @@ import processing.core.PApplet;
 
 //import processing.core.*;
 
-public class NoteProbablilityTest
+public class PrintPitchesAndRhythmTest
 {	
 	MelodyPlayer player;
 	MidiFileToNotes midiNotes;
@@ -38,8 +38,13 @@ public class NoteProbablilityTest
 		pitchGenerator.train(midiNotes.getPitchArray());
 		rhythmGenerator.train(midiNotes.getRhythmArray());
 		
-		pitchGenerator.printProbability();
-		rhythmGenerator.printProbability();
+		pitchGenerator.generate(20);
+		rhythmGenerator.generate(20);
+		
+		System.out.println("Pitches: ");
+		pitchGenerator.printPitchesAndRhythm();
+		System.out.println('\n' + "Rhythm: ");
+		rhythmGenerator.printPitchesAndRhythm();
 	}
 	
 	String getPath(String filename)
