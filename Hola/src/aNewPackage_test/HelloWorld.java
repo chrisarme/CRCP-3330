@@ -11,6 +11,9 @@ import jm.music.data.Score;
 
 public class HelloWorld extends PApplet
 {
+	int generationAmount = 50;
+	boolean playMusic = false;
+	
 	//float x = 150;
 	MelodyPlayer player;
 	MidiFileToNotes midiNotes;
@@ -29,7 +32,7 @@ public class HelloWorld extends PApplet
 	
 	public void settings()
 	{
-		size(300, 300);
+		size(600, 600);
 	}
 	
 	public void setup()
@@ -46,14 +49,19 @@ public class HelloWorld extends PApplet
 		pitchGenerator.train(midiNotes.getPitchArray());
 		rhythmGenerator.train(midiNotes.getRhythmArray());
 		
-		pitchGenerator.testData();
-		rhythmGenerator.testData();
+		pitchGenerator.generate(generationAmount);
+		rhythmGenerator.generate(generationAmount);
+		
+		//pitchGenerator.testData();
+		//rhythmGenerator.testData();
 		
 		player = new MelodyPlayer(this, 100f);
 		player.setup();
-		player.setMelody(midiNotes.getPitchArray());
-		player.setRhythm(midiNotes.getRhythmArray());
+		//player.setMelody(midiNotes.getPitchArray());
+		//player.setRhythm(midiNotes.getRhythmArray());
 		
+		player.setMelody(pitchGenerator.returnGeneratedArray());
+		player.setRhythm(rhythmGenerator.returnGeneratedArray());
 		
 	}
 	
@@ -81,11 +89,43 @@ public class HelloWorld extends PApplet
 	}
 	
 	public void draw()
-	{
-		//ellipse(x, 100, 100, 100);
-		//x += 1;
+	{	
+		background(150);
 		
-		player.play();
+		fill(255);
+		textSize(30);
+		
+		text("Press Space to Start/Stop Music", (width / 2) - textWidth("Press Space to Start/Stop Music") / 2, 50);
+		
+		textSize(40);
+		
+		if (playMusic == true)
+		{
+			text("Playing", (width / 2) - textWidth("Playing") / 2, 100);
+		}
+		else 
+		{
+			text("Not Playing", (width / 2) - textWidth("Not Playing") / 2, 100);
+		}
+		
+		if (playMusic == true)
+		{
+			player.play();
+		}
 	}
 
+	public void keyPressed()
+	{
+		if (key == ' ')
+		{
+			if (playMusic == true)
+			{
+				playMusic = false;
+			}
+			else 
+			{
+				playMusic = true;
+			}
+		}
+	}
 }
