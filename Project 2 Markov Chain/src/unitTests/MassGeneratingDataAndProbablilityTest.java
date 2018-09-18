@@ -43,20 +43,10 @@ public class MassGeneratingDataAndProbablilityTest
 		ArrayList<Integer> currentPitchArray = midiNotes.getPitchArray();
 		ArrayList<Double> currentRhythmArray = midiNotes.getRhythmArray();
 		
-		
-		ProbabilityListGenerator masterPitchGenerator = new ProbabilityListGenerator<Integer>();
-		ProbabilityListGenerator masterRhythmGenerator = new ProbabilityListGenerator<Double>();
-
-		
 		for (int i = 0; i < 10000; i++)
 		{
-			System.out.println(i);
-			//pitchGenerator.clearData();
-			//rhythmGenerator.clearData();
-			
-			
-			pitchGenerator = new ProbabilityListGenerator<Integer>();
-			rhythmGenerator = new ProbabilityListGenerator<Double>();
+			pitchGenerator.clearData();
+			rhythmGenerator.clearData();
 			
 			pitchGenerator.train(currentPitchArray);
 			rhythmGenerator.train(currentRhythmArray);
@@ -66,13 +56,11 @@ public class MassGeneratingDataAndProbablilityTest
 			
 			currentPitchArray = pitchGenerator.returnGeneratedArray();
 			currentRhythmArray = rhythmGenerator.returnGeneratedArray();
-			masterPitchGenerator.train(currentPitchArray);
-			
 		}
 		System.out.println("Pitches: ");
-		masterPitchGenerator.printProbability();
+		pitchGenerator.printPitchesAndRhythm();
 		System.out.println('\n' + "Rhythm: ");
-		rhythmGenerator.printProbability();
+		rhythmGenerator.printPitchesAndRhythm();
 	}
 	
 	String getPath(String filename)

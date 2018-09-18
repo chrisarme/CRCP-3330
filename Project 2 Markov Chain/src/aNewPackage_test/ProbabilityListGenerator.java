@@ -17,7 +17,6 @@ public class ProbabilityListGenerator <E>
 	ArrayList<E> repeatedDataList = new ArrayList<E>();
 	ArrayList<Integer> dataTimesRepeated = new ArrayList<Integer>();
 	ArrayList<Double> dataChanceToAppear = new ArrayList<Double>();
-	ArrayList<Double> dataSumToAppear = new ArrayList<Double>();
 	
 	ArrayList<E> generatedData = new ArrayList<E>();
 	
@@ -27,7 +26,6 @@ public class ProbabilityListGenerator <E>
 		repeatedDataList = new ArrayList<E>();
 		dataTimesRepeated = new ArrayList<Integer>();
 		dataChanceToAppear = new ArrayList<Double>();
-		dataSumToAppear = new ArrayList<Double>();
 		
 		generatedData = new ArrayList<E>();
 	}
@@ -36,12 +34,9 @@ public class ProbabilityListGenerator <E>
 	{
 		dataset = newDataSet;
 		
-		//System.out.println(dataset.size());
-		
 		for (E data : dataset)
 		{
 			String dataString = data.toString();
-			
 			if (Double.parseDouble(dataString) > 0)
 			{
 				repeatedDataList.add(data);
@@ -54,8 +49,6 @@ public class ProbabilityListGenerator <E>
 				{
 					dataList.add(data);
 					dataTimesRepeated.add(1);
-					
-					//System.out.println("halp");
 				}
 				else
 				{
@@ -67,86 +60,36 @@ public class ProbabilityListGenerator <E>
 			//System.out.println(String.valueOf(data));
 		}
 		
-		//System.out.println(dataTimesRepeated.size());
-		
 		// START this is just for test data
 		
-		int timesRepeated = 0;
-		
-		//System.out.println(timesRepeated);
-		
-		for (int i = 0; i < dataTimesRepeated.size(); i++)
-		{
-			timesRepeated += dataTimesRepeated.get(i);
-		}
+				int timesRepeated = 0;
+				
+				for (int i = 0; i < dataTimesRepeated.size(); i++)
+				{
+					timesRepeated += dataTimesRepeated.get(i);
+				}
 
-		for (int i = 0; i < dataTimesRepeated.size(); i++)
-		{
-			dataChanceToAppear.add((double) dataTimesRepeated.get(i) / timesRepeated);
-		}
-		
-		//System.out.println(dataChanceToAppear.size());
-		
-		for (int i = 0; i < dataChanceToAppear.size(); i++)
-		{
-			if (i == 0)
-			{
-				dataSumToAppear.add((double) dataChanceToAppear.get(i));
-				//System.out.println(dataSumToAppear.get(i));
-			}
-			else
-			{
-				dataSumToAppear.add((double) dataChanceToAppear.get(i) + dataSumToAppear.get(i - 1));
-				//System.out.println(dataSumToAppear.get(i));
-			}
-		}
-		
-		//System.out.println("Size: " + dataTimesRepeated.size());
-		//System.out.println(timesRepeated);
-		
-		// END TEST
+				for (int i = 0; i < dataTimesRepeated.size(); i++)
+				{
+					dataChanceToAppear.add((double) dataTimesRepeated.get(i) / timesRepeated);
+				}
+				
+				//System.out.println("Size: " + dataTimesRepeated.size());
+				//System.out.println(timesRepeated);
+				
+				// END TEST
 		
 	}
 	
 	public void generate(int sizeOfGeneration)
 	{	
-		/*for (int i = 0; i < sizeOfGeneration; i++)
+		for (int i = 0; i < sizeOfGeneration; i++)
 		{
-			double randomNum = (Math.random());
+			double randomNum = (Math.random() * (repeatedDataList.size()));
 			
 			//System.out.println(repeatedDataList.get((int) randomNum));
 			
 			generatedData.add(repeatedDataList.get((int) randomNum));
-		}*/
-		
-		for (int i = 0; i < sizeOfGeneration; i++)
-		{
-			double randomNum = Math.random();			
-			//boolean foundThing = false;
-			//int j = 0;
-
-			for (int j = 0; j < dataSumToAppear.size() - 1; j++)
-			//while (j < dataSumToAppear.size())
-			{	
-				if (randomNum <= dataSumToAppear.get(j))
-				{
-					//System.out.println(repeatedDataList.get(j));
-					generatedData.add(repeatedDataList.get(j));
-					//System.out.println("Stopping here");
-					break;
-				}
-				
-				//System.out.println("continuing...");
-				
-				if (j == dataSumToAppear.size() - 2)
-				{
-					generatedData.add(repeatedDataList.get(repeatedDataList.size() - 1));
-					//System.out.println("Oh no");
-					//break;
-				}
-				
-				//j++;
-			}
 		}
 	}
 	

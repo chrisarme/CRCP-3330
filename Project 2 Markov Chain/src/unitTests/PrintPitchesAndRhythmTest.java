@@ -1,12 +1,10 @@
 // Chris Arme
-// This tests what the probability of the generated pitches and rhythms are after 10,000 loops
-// WARNING: THIS DOESN'T WORK DO TO THE PROCESSING POWER ACTUALLY NEEDED TO DO IT
+// This prints the pitches and rhythms that are generated
 
 package unitTests;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 
 import aNewPackage_test.MelodyPlayer;
 
@@ -16,7 +14,7 @@ import processing.core.PApplet;
 
 //import processing.core.*;
 
-public class MassGeneratingDataAndProbablilityTest
+public class PrintPitchesAndRhythmTest
 {	
 	MelodyPlayer player;
 	MidiFileToNotes midiNotes;
@@ -40,39 +38,16 @@ public class MassGeneratingDataAndProbablilityTest
 		midiNotes.setWhichLine(0); // change which channel we are grabbing notes from
 		midiNotes.processPitchesAsTokens();
 		
-		ArrayList<Integer> currentPitchArray = midiNotes.getPitchArray();
-		ArrayList<Double> currentRhythmArray = midiNotes.getRhythmArray();
+		pitchGenerator.train(midiNotes.getPitchArray());
+		rhythmGenerator.train(midiNotes.getRhythmArray());
 		
+		pitchGenerator.generate(20);
+		rhythmGenerator.generate(20);
 		
-		ProbabilityListGenerator masterPitchGenerator = new ProbabilityListGenerator<Integer>();
-		ProbabilityListGenerator masterRhythmGenerator = new ProbabilityListGenerator<Double>();
-
-		
-		for (int i = 0; i < 10000; i++)
-		{
-			System.out.println(i);
-			//pitchGenerator.clearData();
-			//rhythmGenerator.clearData();
-			
-			
-			pitchGenerator = new ProbabilityListGenerator<Integer>();
-			rhythmGenerator = new ProbabilityListGenerator<Double>();
-			
-			pitchGenerator.train(currentPitchArray);
-			rhythmGenerator.train(currentRhythmArray);
-			
-			pitchGenerator.generate(20);
-			rhythmGenerator.generate(20);
-			
-			currentPitchArray = pitchGenerator.returnGeneratedArray();
-			currentRhythmArray = rhythmGenerator.returnGeneratedArray();
-			masterPitchGenerator.train(currentPitchArray);
-			
-		}
 		System.out.println("Pitches: ");
-		masterPitchGenerator.printProbability();
+		pitchGenerator.printPitchesAndRhythm();
 		System.out.println('\n' + "Rhythm: ");
-		rhythmGenerator.printProbability();
+		rhythmGenerator.printPitchesAndRhythm();
 	}
 	
 	String getPath(String filename)

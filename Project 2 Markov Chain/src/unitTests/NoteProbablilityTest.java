@@ -1,5 +1,6 @@
 // Chris Arme
-// This prints the pitches and rhythms that are generated
+// This outputs the probability of data appearing based on whatever was passed in
+// In this case, it is based off of "Mary Had A Little Lamb"
 
 package unitTests;
 
@@ -14,7 +15,7 @@ import processing.core.PApplet;
 
 //import processing.core.*;
 
-public class PrintPitchesAndRhythmTest
+public class NoteProbablilityTest
 {	
 	MelodyPlayer player;
 	MidiFileToNotes midiNotes;
@@ -38,19 +39,11 @@ public class PrintPitchesAndRhythmTest
 		midiNotes.setWhichLine(0); // change which channel we are grabbing notes from
 		midiNotes.processPitchesAsTokens();
 		
-		pitchGenerator.clearData();
-		rhythmGenerator.clearData();
-		
 		pitchGenerator.train(midiNotes.getPitchArray());
 		rhythmGenerator.train(midiNotes.getRhythmArray());
 		
-		pitchGenerator.generate(20);
-		rhythmGenerator.generate(20);
-		
-		System.out.println("Pitches: ");
-		pitchGenerator.printPitchesAndRhythm();
-		System.out.println('\n' + "Rhythm: ");
-		rhythmGenerator.printPitchesAndRhythm();
+		pitchGenerator.printProbability();
+		rhythmGenerator.printProbability();
 	}
 	
 	String getPath(String filename)
