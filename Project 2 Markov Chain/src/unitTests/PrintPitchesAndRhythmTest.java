@@ -1,11 +1,13 @@
 // Chris Arme
-// This prints the pitches and rhythms that are generated
+// This outputs the probability of data appearing based on whatever was passed in
+// In this case, it is based off of "Mary Had A Little Lamb"
 
 package unitTests;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+import aNewPackage_test.MarkovChainListGenerator;
 import aNewPackage_test.MelodyPlayer;
 
 import aNewPackage_test.MidiFileToNotes;
@@ -19,8 +21,8 @@ public class PrintPitchesAndRhythmTest
 	MelodyPlayer player;
 	MidiFileToNotes midiNotes;
 	
-	ProbabilityListGenerator<Integer> pitchGenerator = new ProbabilityListGenerator<Integer>();
-	ProbabilityListGenerator<Double> rhythmGenerator = new ProbabilityListGenerator<Double>();
+	MarkovChainListGenerator<Integer> pitchMarkovGenerator = new MarkovChainListGenerator<Integer>();
+	MarkovChainListGenerator<Double> rhythmMarkovGenerator = new MarkovChainListGenerator<Double>();
 	
 	/*private static void main() 
 	{	
@@ -31,6 +33,9 @@ public class PrintPitchesAndRhythmTest
 	{
 		String path = getPath("../mid/MaryHadALittleLamb.mid");
 		
+		pitchMarkovGenerator = new MarkovChainListGenerator<Integer>();
+		rhythmMarkovGenerator = new MarkovChainListGenerator<Double>();
+		
 		//println(path);
 		
 		//playMidiFile(path);
@@ -38,16 +43,16 @@ public class PrintPitchesAndRhythmTest
 		midiNotes.setWhichLine(0); // change which channel we are grabbing notes from
 		midiNotes.processPitchesAsTokens();
 		
-		pitchGenerator.train(midiNotes.getPitchArray());
-		rhythmGenerator.train(midiNotes.getRhythmArray());
+		pitchMarkovGenerator.train(midiNotes.getPitchArray());
+		rhythmMarkovGenerator.train(midiNotes.getRhythmArray());
 		
-		pitchGenerator.generate(20);
-		rhythmGenerator.generate(20);
+		pitchMarkovGenerator.generate(20);
+		rhythmMarkovGenerator.generate(20);
 		
 		System.out.println("Pitches: ");
-		pitchGenerator.printPitchesAndRhythm();
+		pitchMarkovGenerator.printPitchesAndRhythm();
 		System.out.println('\n' + "Rhythm: ");
-		rhythmGenerator.printPitchesAndRhythm();
+		rhythmMarkovGenerator.printPitchesAndRhythm();
 	}
 	
 	String getPath(String filename)

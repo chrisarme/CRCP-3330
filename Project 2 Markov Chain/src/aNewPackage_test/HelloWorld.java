@@ -5,8 +5,8 @@ package aNewPackage_test;
 
 import processing.core.*;
 import unitTests.MassGeneratingDataAndProbablilityTest;
-import unitTests.NoteProbablilityTest;
 import unitTests.PrintPitchesAndRhythmTest;
+import unitTests.PrintTransitionTablesTest;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -28,9 +28,10 @@ public class HelloWorld extends PApplet
 	ProbabilityListGenerator<Double> rhythmGenerator = new ProbabilityListGenerator<Double>();
 	
 	MarkovChainListGenerator<Integer> pitchMarkovGenerator = new MarkovChainListGenerator<>();
+	MarkovChainListGenerator<Double> rhythmMarkovGenerator = new MarkovChainListGenerator<>();
 	
-	NoteProbablilityTest noteProbTest = new NoteProbablilityTest();
-	PrintPitchesAndRhythmTest pitchAndRhythmTest = new PrintPitchesAndRhythmTest();
+	PrintPitchesAndRhythmTest printDataTest = new PrintPitchesAndRhythmTest();
+	PrintTransitionTablesTest transitionTableTest = new PrintTransitionTablesTest();
 	MassGeneratingDataAndProbablilityTest massGenerationAndProbTest = new MassGeneratingDataAndProbablilityTest();
 	
 	//ProbabilityListGenerator<MidiFileToNotes> probablityGenerator; 
@@ -62,6 +63,11 @@ public class HelloWorld extends PApplet
 		//rhythmGenerator.train(midiNotes.getRhythmArray());
 		
 		pitchMarkovGenerator.train(midiNotes.getPitchArray());
+		rhythmMarkovGenerator.train(midiNotes.getRhythmArray());
+		
+		// The number of data points generated can be anything, 20 is just a good test size
+		pitchMarkovGenerator.generate(20);
+		rhythmMarkovGenerator.generate(20);
 		
 		//pitchGenerator.generate(generationAmount);
 		//rhythmGenerator.generate(generationAmount);
@@ -74,8 +80,8 @@ public class HelloWorld extends PApplet
 		//player.setMelody(midiNotes.getPitchArray());
 		//player.setRhythm(midiNotes.getRhythmArray());
 		
-		player.setMelody(pitchGenerator.returnGeneratedArray());
-		player.setRhythm(rhythmGenerator.returnGeneratedArray());
+		player.setMelody(pitchMarkovGenerator.returnGeneratedArray());
+		player.setRhythm(rhythmMarkovGenerator.returnGeneratedArray());
 		
 	}
 	
@@ -113,13 +119,13 @@ public class HelloWorld extends PApplet
 		text("Press Space to Start/Stop Music", (width / 2) - textWidth("Press Space to Start/Stop Music") / 2, 50);
 		
 		textSize(18);
-		text ("Press 1 for NoteProbablilityTest (Unit Test 1)", (width / 2) - textWidth("Press 1 for NoteProbablilityTest (Unit Test 1)") / 2, 400);
+		text ("Press 1 for TransitionTableTest (Unit Test 1)", (width / 2) - textWidth("Press 1 for TransitionTableTest (Unit Test 1)") / 2, 400);
 		text ("Press 2 for PrintPitchesAndRhythmTest (Unit Test 2)", (width / 2) - textWidth("Press 2 for PrintPitchesAndRhythmTest (Unit Test 2)") / 2, 440);
 		text ("Press 3 for MassGeneratingDataAndProbabliltyTest (Unit Test 3)", (width / 2) - textWidth("Press 3 for MassGeneratingDataAndProbabliltyTest (Unit Test 3)") / 2, 480);
 		
 		textSize(15);
 		fill(220, 0, 0);
-		text("WARNING: UNIT TEST 3 WILL CAUSE ECLIPSE TO THROW AN ERROR", (width / 2) - textWidth("WARNING: UNIT TEST 3 WILL CAUSE ECLIPSE TO THROW AN ERROR") / 2, 500);
+		//text("WARNING: UNIT TEST 3 WILL CAUSE ECLIPSE TO THROW AN ERROR", (width / 2) - textWidth("WARNING: UNIT TEST 3 WILL CAUSE ECLIPSE TO THROW AN ERROR") / 2, 500);
 		
 		fill(255);
 		textSize(40);
@@ -155,11 +161,11 @@ public class HelloWorld extends PApplet
 		
 		if (key == '1')
 		{
-			noteProbTest.actualTest();
+			transitionTableTest.actualTest();
 		}
 		else if (key == '2')
 		{
-			pitchAndRhythmTest.actualTest();
+			printDataTest.actualTest();
 		}
 		else if (key == '3')
 		{

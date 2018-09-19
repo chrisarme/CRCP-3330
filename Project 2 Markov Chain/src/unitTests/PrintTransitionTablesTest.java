@@ -1,12 +1,12 @@
 // Chris Arme
-// This outputs the probability of data appearing based on whatever was passed in
-// In this case, it is based off of "Mary Had A Little Lamb"
+// This prints the pitches and rhythms that are generated
 
 package unitTests;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+import aNewPackage_test.MarkovChainListGenerator;
 import aNewPackage_test.MelodyPlayer;
 
 import aNewPackage_test.MidiFileToNotes;
@@ -15,13 +15,13 @@ import processing.core.PApplet;
 
 //import processing.core.*;
 
-public class NoteProbablilityTest
+public class PrintTransitionTablesTest
 {	
 	MelodyPlayer player;
 	MidiFileToNotes midiNotes;
 	
-	ProbabilityListGenerator<Integer> pitchGenerator = new ProbabilityListGenerator<Integer>();
-	ProbabilityListGenerator<Double> rhythmGenerator = new ProbabilityListGenerator<Double>();
+	MarkovChainListGenerator<Integer> pitchMarkovGenerator = new MarkovChainListGenerator<>();
+	MarkovChainListGenerator<Double> rhythmMarkovGenerator = new MarkovChainListGenerator<>();
 	
 	/*private static void main() 
 	{	
@@ -39,11 +39,16 @@ public class NoteProbablilityTest
 		midiNotes.setWhichLine(0); // change which channel we are grabbing notes from
 		midiNotes.processPitchesAsTokens();
 		
-		pitchGenerator.train(midiNotes.getPitchArray());
-		rhythmGenerator.train(midiNotes.getRhythmArray());
+		pitchMarkovGenerator.train(midiNotes.getPitchArray());
+		rhythmMarkovGenerator.train(midiNotes.getRhythmArray());
 		
-		pitchGenerator.printProbability();
-		rhythmGenerator.printProbability();
+		pitchMarkovGenerator.generate(20);
+		rhythmMarkovGenerator.generate(20);
+		
+		System.out.println("Pitches: ");
+		pitchMarkovGenerator.printTransitionTable();
+		System.out.println('\n' + "Rhythm: ");
+		rhythmMarkovGenerator.printTransitionTable();
 	}
 	
 	String getPath(String filename)

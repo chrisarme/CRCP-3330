@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 
+import aNewPackage_test.MarkovChainListGenerator;
 import aNewPackage_test.MelodyPlayer;
 
 import aNewPackage_test.MidiFileToNotes;
@@ -21,8 +22,8 @@ public class MassGeneratingDataAndProbablilityTest
 	MelodyPlayer player;
 	MidiFileToNotes midiNotes;
 	
-	ProbabilityListGenerator<Integer> pitchGenerator = new ProbabilityListGenerator<Integer>();
-	ProbabilityListGenerator<Double> rhythmGenerator = new ProbabilityListGenerator<Double>();
+	MarkovChainListGenerator<Integer> pitchMarkovGenerator = new MarkovChainListGenerator<Integer>();
+	MarkovChainListGenerator<Double> rhythmMarkovGenerator = new MarkovChainListGenerator<Double>();
 	
 	/*private static void main() 
 	{	
@@ -35,6 +36,9 @@ public class MassGeneratingDataAndProbablilityTest
 		
 		//println(path);
 		
+		pitchMarkovGenerator = new MarkovChainListGenerator<Integer>();
+		rhythmMarkovGenerator = new MarkovChainListGenerator<Double>();
+		
 		//playMidiFile(path);
 		midiNotes = new MidiFileToNotes(path);
 		midiNotes.setWhichLine(0); // change which channel we are grabbing notes from
@@ -44,23 +48,25 @@ public class MassGeneratingDataAndProbablilityTest
 		ArrayList<Double> currentRhythmArray = midiNotes.getRhythmArray();
 		
 		for (int i = 0; i < 10000; i++)
-		{
-			pitchGenerator.clearData();
-			rhythmGenerator.clearData();
+		{		
+			pitchMarkovGenerator.clearData();
+			rhythmMarkovGenerator.clearData();
 			
-			pitchGenerator.train(currentPitchArray);
-			rhythmGenerator.train(currentRhythmArray);
+			pitchMarkovGenerator.train(currentPitchArray);
+			rhythmMarkovGenerator.train(currentRhythmArray);
 			
-			pitchGenerator.generate(20);
-			rhythmGenerator.generate(20);
+			pitchMarkovGenerator.generate(20);
+			rhythmMarkovGenerator.generate(20);
 			
-			currentPitchArray = pitchGenerator.returnGeneratedArray();
-			currentRhythmArray = rhythmGenerator.returnGeneratedArray();
+			currentPitchArray = pitchMarkovGenerator.returnGeneratedArray();
+			currentRhythmArray = rhythmMarkovGenerator.returnGeneratedArray();
 		}
+		
 		System.out.println("Pitches: ");
-		pitchGenerator.printPitchesAndRhythm();
+		
+		pitchMarkovGenerator.printTransitionTable();
 		System.out.println('\n' + "Rhythm: ");
-		rhythmGenerator.printPitchesAndRhythm();
+		rhythmMarkovGenerator.printTransitionTable();
 	}
 	
 	String getPath(String filename)

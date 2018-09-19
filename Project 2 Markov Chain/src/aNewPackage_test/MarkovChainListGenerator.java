@@ -1,4 +1,5 @@
 // Chris Arme
+// Jeeeeez, this was rollercoaster. However, once I got to the end, everything fit nicely into place as far as I can tell.
 
 package aNewPackage_test;
 
@@ -11,7 +12,11 @@ public class MarkovChainListGenerator <E>
 	ArrayList<E> dataList = new ArrayList<E>(); 
 	ArrayList<E> correctedDataList = new ArrayList<E>();
 	ArrayList<Integer> dataTimesRepeated = new ArrayList<Integer>();
+	
+	// Transition Table
 	Integer[][] dataTimesRepeatedArray = new Integer[0][0];
+	
+	
 	Float[][] dataChanceToAppear = new Float[0][0];
 	ArrayList<Double> dataSumToAppear = new ArrayList<Double>();
 	Float[][] dataSumToAppearArray = new Float[0][0];
@@ -86,6 +91,7 @@ public class MarkovChainListGenerator <E>
 			{
 				dataChanceToAppear[i][j] = 0f;
 				dataTimesRepeatedArray[i][j] = 0;
+				dataSumToAppearArray[i][j] = 0f;
 			}
 		}
 		
@@ -124,12 +130,19 @@ public class MarkovChainListGenerator <E>
 			
 			for (int j = 0; j < dataChanceToAppear[i].length; j++)
 			{
-				dataChanceToAppear[i][j] = ( (float) dataTimesRepeatedArray[i][j] / (float) dataPointTotal[i]);
-				
-				if (dataChanceToAppear[i][j] != 0f)
+				if (dataPointTotal[i] > 0)
 				{
-					dataSumToAppearArray[i][j] = dataChanceToAppear[i][j] + lastSum;
-					lastSum += dataChanceToAppear[i][j];
+					dataChanceToAppear[i][j] = ( (float) dataTimesRepeatedArray[i][j] / (float) dataPointTotal[i]);
+					
+					if (dataChanceToAppear[i][j] != 0f)
+					{
+						dataSumToAppearArray[i][j] = dataChanceToAppear[i][j] + lastSum;
+						lastSum += dataChanceToAppear[i][j];
+					}
+					else
+					{
+						dataSumToAppearArray[i][j] = -1f;
+					}
 				}
 				else
 				{
@@ -185,14 +198,15 @@ public class MarkovChainListGenerator <E>
 				double randomNum = Math.random();	
 				boolean createdData = false;
 				int j = 0;
+				
 				int index = dataList.indexOf(generatedData.get(i-1));
 				
-				while (j < dataSumToAppear.size() && createdData == false)
+				while (j < dataSumToAppearArray[index].length && createdData == false)
 				{	
 					if ((randomNum <= dataSumToAppearArray[index][j] && dataSumToAppearArray[index][j] != -1f) || dataSumToAppearArray[index][j] == 1f)
 					{
-						generatedData.add(correctedDataList.get(j));
-						System.out.println("Stopping here");
+						generatedData.add(dataList.get(j));
+						//System.out.println("Stopping here");
 						createdData = true;
 					}
 	
@@ -205,11 +219,19 @@ public class MarkovChainListGenerator <E>
 					
 					j++;
 				}
+				
+				// This should only happen if the note being check is the last note in the original song. For now, we will add the first note to start the generation again
+				if (createdData == false)
+				{
+					generatedData.add(dataList.get(0));
+					//System.out.println("Stopping here");
+					createdData = true;
+				}
 			}
 			else
 			{
 				generatedData.add(dataset.get(0));
-				System.out.println("First data!");
+				//System.out.println("First data!");
 			}
 		}
 	}
@@ -217,18 +239,6 @@ public class MarkovChainListGenerator <E>
 	public ArrayList<E> returnGeneratedArray()
 	{
 		return generatedData;
-	}
-	
-	public void printProbability()
-	{
-		System.out.println("-----UNIT TEST DATA START-----");
-		
-		for (int i = 0; i < dataList.size(); i++)
-		{
-			//System.out.println("Data: " + dataList.get(i) + " | Chance to appear: " + dataChanceToAppear.get(i));
-		}
-		
-		System.out.println("------UNIT TEST DATA END------");
 	}
 	
 	public void printPitchesAndRhythm()
@@ -242,4 +252,51 @@ public class MarkovChainListGenerator <E>
 		
 		System.out.println('\n' + "------UNIT TEST DATA END------");
 	}
-}
+	
+	public void printTransitionTable()
+	{
+		// The data on the top is the before, while the data on the side is the after.
+		
+		/*
+		 * 		   62 64
+		 * 		62|	0 1					This means that there is 1 instance of there being a 62 after a 64 
+		 * 		64|	2 0					and there are 2 instances of 64 after a 62
+		 * 
+		 */
+		
+		System.out.println("-----UNIT TEST DATA START-----");
+		System.out.println("-------TRANSITION TABLE-------");
+		
+		for (int i = 0; i < dataTimesRepeatedArray.length; i++)
+		{
+			if (i == 0)
+			{
+				System.out.print("   ");
+			}
+			
+			System.out.print(dataList.get(i) + " ");
+		}
+		
+		System.out.println("");
+		
+		for (int i = 0; i < dataTimesRepeatedArray.length; i++)
+		{
+			for (int j = 0; j < dataTimesRepeatedArray[i].length; j++)
+			{
+					if (j == 0)
+					{
+						System.out.print(dataList.get(i) + "|");
+					}
+					
+					System.out.print(dataChanceToAppear[i][j] + " ");
+
+				
+			}
+			
+			System.out.println("");
+		}
+		
+		System.out.println('\n' + "------UNIT TEST DATA END------");
+		}
+	}
+	
