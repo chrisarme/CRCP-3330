@@ -27,8 +27,8 @@ public class HelloWorld extends PApplet
 	ProbabilityListGenerator<Integer> pitchGenerator = new ProbabilityListGenerator<Integer>();
 	ProbabilityListGenerator<Double> rhythmGenerator = new ProbabilityListGenerator<Double>();
 	
-	MarkovChainListGenerator<Integer> pitchMarkovGenerator = new MarkovChainListGenerator<>();
-	MarkovChainListGenerator<Double> rhythmMarkovGenerator = new MarkovChainListGenerator<>();
+	MarkovChainListGenerator<Integer> pitchMarkovGenerator = new MarkovChainListGenerator<>(3);
+	MarkovChainListGenerator<Double> rhythmMarkovGenerator = new MarkovChainListGenerator<>(3);
 	
 	PrintPitchesAndRhythmTest printDataTest = new PrintPitchesAndRhythmTest();
 	PrintTransitionTablesTest transitionTableTest = new PrintTransitionTablesTest();

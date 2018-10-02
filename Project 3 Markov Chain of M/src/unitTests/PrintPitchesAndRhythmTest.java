@@ -21,8 +21,8 @@ public class PrintPitchesAndRhythmTest
 	MelodyPlayer player;
 	MidiFileToNotes midiNotes;
 	
-	MarkovChainListGenerator<Integer> pitchMarkovGenerator = new MarkovChainListGenerator<Integer>();
-	MarkovChainListGenerator<Double> rhythmMarkovGenerator = new MarkovChainListGenerator<Double>();
+	MarkovChainListGenerator<Integer> pitchMarkovGenerator = new MarkovChainListGenerator<Integer>(3);
+	MarkovChainListGenerator<Double> rhythmMarkovGenerator = new MarkovChainListGenerator<Double>(3);
 	
 	/*private static void main() 
 	{	
@@ -33,8 +33,8 @@ public class PrintPitchesAndRhythmTest
 	{
 		String path = getPath("../mid/MaryHadALittleLamb.mid");
 		
-		pitchMarkovGenerator = new MarkovChainListGenerator<Integer>();
-		rhythmMarkovGenerator = new MarkovChainListGenerator<Double>();
+		pitchMarkovGenerator = new MarkovChainListGenerator<Integer>(3);
+		rhythmMarkovGenerator = new MarkovChainListGenerator<Double>(3);
 		
 		//println(path);
 		

@@ -7,27 +7,50 @@ import java.util.ArrayList;
 
 public class MarkovChainListGenerator <E>
 {
+	int order;
+	
 	ArrayList<E> dataset;
 	
 	ArrayList<E> dataList = new ArrayList<E>(); 
+	ArrayList<ArrayList<E>> dataListOfArrays = new ArrayList<ArrayList<E>>();
 	ArrayList<E> correctedDataList = new ArrayList<E>();
+	ArrayList<ArrayList<E>> correctedDataArrayList = new ArrayList<ArrayList<E>>();
 	ArrayList<Integer> dataTimesRepeated = new ArrayList<Integer>();
+	ArrayList<Integer> dataArrayTimesRepeated = new ArrayList<Integer>();
 	
 	// Transition Table
 	Integer[][] dataTimesRepeatedArray = new Integer[0][0];
-	
-	
+
 	Float[][] dataChanceToAppear = new Float[0][0];
 	ArrayList<Double> dataSumToAppear = new ArrayList<Double>();
 	Float[][] dataSumToAppearArray = new Float[0][0];
 	
 	ArrayList<E> generatedData = new ArrayList<E>();
 	
+	public MarkovChainListGenerator()
+	{
+		order = 1;
+	}
+	
+	public MarkovChainListGenerator(int m)
+	{
+		order = m;
+	}
+	
+	public void changeOrder(int m)
+	{
+		order = m;
+	}
+	
 	public void clearData()
 	{
-		dataList = new ArrayList<E>(); 
+		dataList = new ArrayList<E>();
+		dataListOfArrays = new ArrayList<ArrayList<E>>();
+		
 		correctedDataList = new ArrayList<E>();
+		correctedDataArrayList = new ArrayList<ArrayList<E>>();
 		dataTimesRepeated = new ArrayList<Integer>();
+		dataArrayTimesRepeated = new ArrayList<Integer>();
 		dataChanceToAppear = new Float[0][0];
 		dataTimesRepeatedArray = new Integer[0][0];
 		dataSumToAppear = new ArrayList<Double>();
@@ -52,8 +75,9 @@ public class MarkovChainListGenerator <E>
 		
 		//System.out.println(dataset.size());
 		
-		for (E data : dataset)
+		for (int i = 0; i < dataset.size(); i++)
 		{
+			E data = dataset.get(i);
 			String dataString = data.toString();
 			
 			if (Double.parseDouble(dataString) > 0)
@@ -76,16 +100,38 @@ public class MarkovChainListGenerator <E>
 					dataTimesRepeated.set(index, dataTimesRepeated.get(index) + 1);
 				}
 			}
-			
-			
 			//System.out.println(String.valueOf(data));
 		}
 		
-		dataChanceToAppear = new Float[dataList.size()][dataList.size()];
-		dataTimesRepeatedArray = new Integer[dataList.size()][dataList.size()];
-		dataSumToAppearArray = new Float[dataList.size()][dataList.size()];
+		for (int i = order; i < correctedDataList.size(); i++)
+		{
+			ArrayList<E> newArray = new ArrayList<E>();
+			
+			for (int m = order; m >= 0; m--)
+			{
+				newArray.add(correctedDataList.get(i-m));
+			}
+			
+			correctedDataArrayList.add(newArray);
+			
+			int index = dataListOfArrays.indexOf(newArray);
+			
+			if (index == -1)
+			{
+				dataListOfArrays.add(newArray);
+				dataArrayTimesRepeated.add(1);
+			}
+			else
+			{
+				dataArrayTimesRepeated.set(index, dataArrayTimesRepeated.get(index) + 1);
+			}
+		}
 		
-		for (int i = 0; i < dataList.size(); i++)
+		dataChanceToAppear = new Float[dataListOfArrays.size()][dataList.size()];
+		dataTimesRepeatedArray = new Integer[dataListOfArrays.size()][dataList.size()];
+		dataSumToAppearArray = new Float[dataListOfArrays.size()][dataList.size()];
+		
+		for (int i = 0; i < dataListOfArrays.size(); i++)
 		{
 			for (int j = 0; j < dataList.size(); j++)
 			{
@@ -96,7 +142,7 @@ public class MarkovChainListGenerator <E>
 		}
 		
 		// Fill out dataTimesRepeatedArray
-		for (int i = 0; i < correctedDataList.size() - 1; i++)
+		/*for (int i = 0; i < correctedDataList.size() - 1; i++)
 		{
 			E currentData = correctedDataList.get(i);
 			E nextData = correctedDataList.get(i + 1);
@@ -105,6 +151,25 @@ public class MarkovChainListGenerator <E>
 			int nextIndex = dataList.indexOf(nextData);
 			
 			dataTimesRepeatedArray[currentIndex][nextIndex] = dataTimesRepeatedArray[currentIndex][nextIndex] + 1;
+		}*/
+		
+		// Fill out dataTimesRepeatedArray
+		for (int i = 0; i < correctedDataArrayList.size(); i++)
+		{
+			for (int j = order; j < correctedDataList.size(); j++)
+			{
+				ArrayList<E> arrayData = correctedDataArrayList.get(i);
+
+				E currentData = correctedDataList.get(i);
+				
+				// previous index
+				int arrayIndex = dataListOfArrays.indexOf(arrayData);
+				
+				// current index
+				int currentIndex = dataList.indexOf(currentData);
+				
+				dataTimesRepeatedArray[arrayIndex][currentIndex] = dataTimesRepeatedArray[arrayIndex][currentIndex] + 1;
+			}
 		}
 		
 		// create the total amount of data points in an array

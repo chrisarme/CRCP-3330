@@ -22,8 +22,11 @@ public class MassGeneratingDataAndProbablilityTest
 	MelodyPlayer player;
 	MidiFileToNotes midiNotes;
 	
-	MarkovChainListGenerator<Integer> pitchMarkovGenerator = new MarkovChainListGenerator<Integer>();
-	MarkovChainListGenerator<Double> rhythmMarkovGenerator = new MarkovChainListGenerator<Double>();
+	MarkovChainListGenerator<Integer> pitchMarkovGenerator = new MarkovChainListGenerator<Integer>(3);
+	MarkovChainListGenerator<Double> rhythmMarkovGenerator = new MarkovChainListGenerator<Double>(3);
+	
+	MarkovChainListGenerator<Integer> pitchMarkovMasterGenerator = new MarkovChainListGenerator<Integer>(3);
+	MarkovChainListGenerator<Double> rhythmMarkovMasterGenerator = new MarkovChainListGenerator<Double>(3);
 	
 	/*private static void main() 
 	{	
@@ -36,8 +39,11 @@ public class MassGeneratingDataAndProbablilityTest
 		
 		//println(path);
 		
-		pitchMarkovGenerator = new MarkovChainListGenerator<Integer>();
-		rhythmMarkovGenerator = new MarkovChainListGenerator<Double>();
+		pitchMarkovGenerator = new MarkovChainListGenerator<Integer>(3);
+		rhythmMarkovGenerator = new MarkovChainListGenerator<Double>(3);
+		
+		pitchMarkovMasterGenerator = new MarkovChainListGenerator<Integer>(3);
+		rhythmMarkovMasterGenerator = new MarkovChainListGenerator<Double>(3);
 		
 		//playMidiFile(path);
 		midiNotes = new MidiFileToNotes(path);
@@ -58,15 +64,15 @@ public class MassGeneratingDataAndProbablilityTest
 			pitchMarkovGenerator.generate(20);
 			rhythmMarkovGenerator.generate(20);
 			
-			currentPitchArray = pitchMarkovGenerator.returnGeneratedArray();
-			currentRhythmArray = rhythmMarkovGenerator.returnGeneratedArray();
+			pitchMarkovMasterGenerator.train(pitchMarkovGenerator.returnGeneratedArray());
+			rhythmMarkovMasterGenerator.train(rhythmMarkovGenerator.returnGeneratedArray());
 		}
 		
 		System.out.println("Pitches: ");
 		
-		pitchMarkovGenerator.printTransitionTable();
+		pitchMarkovMasterGenerator.printTransitionTable();
 		System.out.println('\n' + "Rhythm: ");
-		rhythmMarkovGenerator.printTransitionTable();
+		rhythmMarkovMasterGenerator.printTransitionTable();
 	}
 	
 	String getPath(String filename)
