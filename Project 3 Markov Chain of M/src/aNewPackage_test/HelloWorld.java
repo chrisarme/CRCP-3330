@@ -50,7 +50,7 @@ public class HelloWorld extends PApplet
 	
 	public void setup()
 	{
-		String path = getPath("../mid/MaryHadALittleLamb.mid");
+		String path = getPath("../mid/Ambiguous.mid");
 		
 		//println(path);
 		
@@ -66,8 +66,8 @@ public class HelloWorld extends PApplet
 		rhythmMarkovGenerator.train(midiNotes.getRhythmArray());
 		
 		// The number of data points generated can be anything, 20 is just a good test size
-		pitchMarkovGenerator.generate(20);
-		rhythmMarkovGenerator.generate(20);
+		pitchMarkovGenerator.generate(100);
+		rhythmMarkovGenerator.generate(100);
 		
 		//pitchGenerator.generate(generationAmount);
 		//rhythmGenerator.generate(generationAmount);

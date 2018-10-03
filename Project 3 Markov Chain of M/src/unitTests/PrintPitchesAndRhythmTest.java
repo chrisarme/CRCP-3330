@@ -31,7 +31,7 @@ public class PrintPitchesAndRhythmTest
 	
 	public void actualTest()
 	{
-		String path = getPath("../mid/MaryHadALittleLamb.mid");
+		String path = getPath("../mid/Ambiguous.mid");
 		
 		pitchMarkovGenerator = new MarkovChainListGenerator<Integer>(3);
 		rhythmMarkovGenerator = new MarkovChainListGenerator<Double>(3);

@@ -25,6 +25,9 @@ public class MarkovChainListGenerator <E>
 	ArrayList<Double> dataSumToAppear = new ArrayList<Double>();
 	Float[][] dataSumToAppearArray = new Float[0][0];
 	
+	Float[] singleDataChanceToAppear = new Float[0];
+	Float[] singleDataSumToAppear = new Float[0];
+	
 	ArrayList<E> generatedData = new ArrayList<E>();
 	
 	public MarkovChainListGenerator()
@@ -34,12 +37,12 @@ public class MarkovChainListGenerator <E>
 	
 	public MarkovChainListGenerator(int m)
 	{
-		order = m;
+		order = m - 1;
 	}
 	
 	public void changeOrder(int m)
 	{
-		order = m;
+		order = m - 1;
 	}
 	
 	public void clearData()
@@ -55,6 +58,9 @@ public class MarkovChainListGenerator <E>
 		dataTimesRepeatedArray = new Integer[0][0];
 		dataSumToAppear = new ArrayList<Double>();
 		dataSumToAppearArray = new Float[0][0];
+		
+		singleDataChanceToAppear = new Float[0];
+		singleDataSumToAppear = new Float[0];
 		
 		generatedData = new ArrayList<E>();
 	}
@@ -131,6 +137,9 @@ public class MarkovChainListGenerator <E>
 		dataTimesRepeatedArray = new Integer[dataListOfArrays.size()][dataList.size()];
 		dataSumToAppearArray = new Float[dataListOfArrays.size()][dataList.size()];
 		
+		singleDataChanceToAppear = new Float[dataList.size()];
+		singleDataSumToAppear = new Float[dataList.size()];
+		
 		for (int i = 0; i < dataListOfArrays.size(); i++)
 		{
 			for (int j = 0; j < dataList.size(); j++)
@@ -138,6 +147,9 @@ public class MarkovChainListGenerator <E>
 				dataChanceToAppear[i][j] = 0f;
 				dataTimesRepeatedArray[i][j] = 0;
 				dataSumToAppearArray[i][j] = 0f;
+				
+				singleDataChanceToAppear[j] = 0f;
+				singleDataSumToAppear[j] = 0f;
 			}
 		}
 		
@@ -173,18 +185,22 @@ public class MarkovChainListGenerator <E>
 		}
 		
 		// create the total amount of data points in an array
-		Integer[] dataPointTotal = new Integer[dataList.size()];
+		Integer[] dataPointTotal = new Integer[dataTimesRepeatedArray.length];
+		Integer singleDataPointTotal = 0;
 		
-		for (int i = 0; i < dataPointTotal.length; i++)
+		for (int i = 0; i < dataTimesRepeatedArray.length; i++)
 		{
 			int dataTotal = 0;
+			int singleDataTotal = 0;
 			
-			for (int j = 0; j < dataPointTotal.length; j++)
+			for (int j = 0; j < dataList.size(); j++)
 			{
 				dataTotal += dataTimesRepeatedArray[i][j];
+				singleDataTotal += dataTimesRepeated.get(j);
 			}
 			
 			dataPointTotal[i] = dataTotal;
+			singleDataPointTotal = singleDataTotal;
 		}
 		
 		
@@ -192,12 +208,14 @@ public class MarkovChainListGenerator <E>
 		for (int i = 0; i < dataChanceToAppear.length; i++)
 		{
 			float lastSum = 0;
+			float singleLastSum = 0;
 			
 			for (int j = 0; j < dataChanceToAppear[i].length; j++)
 			{
 				if (dataPointTotal[i] > 0)
 				{
 					dataChanceToAppear[i][j] = ( (float) dataTimesRepeatedArray[i][j] / (float) dataPointTotal[i]);
+					
 					
 					if (dataChanceToAppear[i][j] != 0f)
 					{
@@ -216,7 +234,16 @@ public class MarkovChainListGenerator <E>
 			}
 		}
 		
-		//int test = 0;
+		float singleLastSum = 0;
+		
+		for (int i = 0; i < singleDataChanceToAppear.length; i++)
+		{
+			singleDataChanceToAppear[i] = ((float) dataTimesRepeated.get(i) / (float) singleDataPointTotal);
+			singleDataSumToAppear[i] = singleDataChanceToAppear[i] + singleLastSum;
+			singleLastSum += singleDataChanceToAppear[i];
+		}
+	
+		int test = 0;
 		// dataSumToAppearArray creation
 		/*for (int i = 0; i < dataChanceToAppear.length; i++)
 		{
@@ -256,33 +283,63 @@ public class MarkovChainListGenerator <E>
 			generatedData.add(repeatedDataList.get((int) randomNum));
 		}*/
 		
-		for (int i = 0; i < sizeOfGeneration; i++)
+		for (int i = order; i < sizeOfGeneration; i++)
 		{
-			if (i != 0)
+			ArrayList<E> generation = new ArrayList<E>();
+			
+			if (i != order)
 			{
 				double randomNum = Math.random();	
 				boolean createdData = false;
 				int j = 0;
 				
-				int index = dataList.indexOf(generatedData.get(i-1));
+				for (int m = order; m >= 0; m--)
+				{
+					generation.add(generatedData.get(generatedData.size() - 1 - m));
+				}
 				
-				while (j < dataSumToAppearArray[index].length && createdData == false)
-				{	
-					if ((randomNum <= dataSumToAppearArray[index][j] && dataSumToAppearArray[index][j] != -1f) || dataSumToAppearArray[index][j] == 1f)
-					{
-						generatedData.add(dataList.get(j));
-						//System.out.println("Stopping here");
-						createdData = true;
+				int index = dataListOfArrays.indexOf(generation);
+				
+				if (index != -1)
+				{
+					while (j < dataSumToAppearArray[index].length && createdData == false)
+					{	
+						if ((randomNum <= dataSumToAppearArray[index][j] && dataSumToAppearArray[index][j] != -1f) || dataSumToAppearArray[index][j] == 1f)
+						{
+							generatedData.add(dataList.get(j));
+							//System.out.println("Stopping here");
+							createdData = true;
+						}
+						/*else if (index == -1)
+						{
+							if ((randomNum <= dataSumToAppearArray[index][j]) || dataSumToAppearArray[index][j] == 1f)
+							{
+								
+							}
+						}*/
+		
+						/*if (j == dataSumToAppear.size() - 2)
+						{
+							generatedData.add(correctedDataList.get(correctedDataList.size() - 1));
+							//System.out.println("Last Data");
+							createdData = true;
+						}*/
+						
+						j++;
 					}
-	
-					/*if (j == dataSumToAppear.size() - 2)
+				}
+				else
+				{
+					while (j < singleDataSumToAppear.length && createdData == false)
 					{
-						generatedData.add(correctedDataList.get(correctedDataList.size() - 1));
-						//System.out.println("Last Data");
-						createdData = true;
-					}*/
-					
-					j++;
+						if (randomNum <= singleDataSumToAppear[j] || singleDataSumToAppear[j] == 1f)
+						{
+							generatedData.add(dataList.get(j));
+							createdData = true;
+						}
+						
+						j++;
+					}
 				}
 				
 				// This should only happen if the note being check is the last note in the original song. For now, we will add the first note to start the generation again
@@ -295,11 +352,17 @@ public class MarkovChainListGenerator <E>
 			}
 			else
 			{
-				generatedData.add(dataset.get(0));
+				for (int m = 0; m <= order; m++)
+				{
+					generatedData.add(dataset.get(m));
+				}
 				//System.out.println("First data!");
 			}
 		}
+		int test = 0;
 	}
+	
+	
 	
 	public ArrayList<E> returnGeneratedArray()
 	{

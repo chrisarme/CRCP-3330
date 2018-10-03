@@ -30,7 +30,7 @@ public class PrintTransitionTablesTest
 	
 	public void actualTest()
 	{
-		String path = getPath("../mid/MaryHadALittleLamb.mid");
+		String path = getPath("../mid/Ambiguous.mid");
 		
 		//println(path);
 		
