@@ -20,8 +20,8 @@ public class PrintTransitionTablesTest
 	MelodyPlayer player;
 	MidiFileToNotes midiNotes;
 	
-	MarkovChainListGenerator<Integer> pitchMarkovGenerator = new MarkovChainListGenerator<>();
-	MarkovChainListGenerator<Double> rhythmMarkovGenerator = new MarkovChainListGenerator<>();
+	MarkovChainListGenerator<Integer> pitchMarkovGenerator = new MarkovChainListGenerator<>(2);
+	MarkovChainListGenerator<Double> rhythmMarkovGenerator = new MarkovChainListGenerator<>(2);
 	
 	/*private static void main() 
 	{	
@@ -30,25 +30,34 @@ public class PrintTransitionTablesTest
 	
 	public void actualTest()
 	{
-		String path = getPath("../mid/Ambiguous.mid");
+		String path = getPath("../mid/MaryHadALittleLamb.mid");
 		
 		//println(path);
 		
+		for (int i = 1; i <= 10; i++)
+		{
 		//playMidiFile(path);
-		midiNotes = new MidiFileToNotes(path);
-		midiNotes.setWhichLine(0); // change which channel we are grabbing notes from
-		midiNotes.processPitchesAsTokens();
-		
-		pitchMarkovGenerator.train(midiNotes.getPitchArray());
-		rhythmMarkovGenerator.train(midiNotes.getRhythmArray());
-		
-		pitchMarkovGenerator.generate(20);
-		rhythmMarkovGenerator.generate(20);
-		
-		System.out.println("Pitches: ");
-		pitchMarkovGenerator.printTransitionTable();
-		System.out.println('\n' + "Rhythm: ");
-		rhythmMarkovGenerator.printTransitionTable();
+			midiNotes = new MidiFileToNotes(path);
+			midiNotes.setWhichLine(0); // change which channel we are grabbing notes from
+			midiNotes.processPitchesAsTokens();
+			
+			pitchMarkovGenerator.clearData();
+			rhythmMarkovGenerator.clearData();
+			
+			pitchMarkovGenerator.changeOrder(i);
+			rhythmMarkovGenerator.changeOrder(i);
+			
+			pitchMarkovGenerator.train(midiNotes.getPitchArray());
+			rhythmMarkovGenerator.train(midiNotes.getRhythmArray());
+			
+			pitchMarkovGenerator.generate(20);
+			rhythmMarkovGenerator.generate(20);
+			
+			System.out.println("Pitches: ");
+			pitchMarkovGenerator.printTransitionTable();
+			System.out.println('\n' + "Rhythm: ");
+			rhythmMarkovGenerator.printTransitionTable();
+		}
 	}
 	
 	String getPath(String filename)

@@ -37,12 +37,12 @@ public class MarkovChainListGenerator <E>
 	
 	public MarkovChainListGenerator(int m)
 	{
-		order = m - 1;
+		order = m;
 	}
 	
 	public void changeOrder(int m)
 	{
-		order = m - 1;
+		order = m;
 	}
 	
 	public void clearData()
@@ -84,10 +84,11 @@ public class MarkovChainListGenerator <E>
 		for (int i = 0; i < dataset.size(); i++)
 		{
 			E data = dataset.get(i);
-			String dataString = data.toString();
+			//String dataString = data.toString();
 			
-			if (Double.parseDouble(dataString) > 0)
-			{
+			//cooking data
+			//if (Double.parseDouble(dataString) > 0)
+			//{
 				correctedDataList.add(data);
 				
 				int index = dataList.indexOf(data);
@@ -107,13 +108,14 @@ public class MarkovChainListGenerator <E>
 				}
 			}
 			//System.out.println(String.valueOf(data));
-		}
+		//}
 		
+		//cooking mo' data
 		for (int i = order; i < correctedDataList.size(); i++)
 		{
 			ArrayList<E> newArray = new ArrayList<E>();
 			
-			for (int m = order; m >= 0; m--)
+			for (int m = order; m > 0; m--)
 			{
 				newArray.add(correctedDataList.get(i-m));
 			}
@@ -133,6 +135,30 @@ public class MarkovChainListGenerator <E>
 			}
 		}
 		
+		//final data
+		
+		ArrayList<E> newArray = new ArrayList<E>();
+		
+		for (int m = order; m > 0; m--)
+		{
+			newArray.add(correctedDataList.get(correctedDataList.size()-m));
+		}
+		
+		correctedDataArrayList.add(newArray);
+		
+		int index = dataListOfArrays.indexOf(newArray);
+		
+		if (index == -1)
+		{
+			dataListOfArrays.add(newArray);
+			dataArrayTimesRepeated.add(1);
+		}
+		else
+		{
+			dataArrayTimesRepeated.set(index, dataArrayTimesRepeated.get(index) + 1);
+		}
+		
+		//we are actually training
 		dataChanceToAppear = new Float[dataListOfArrays.size()][dataList.size()];
 		dataTimesRepeatedArray = new Integer[dataListOfArrays.size()][dataList.size()];
 		dataSumToAppearArray = new Float[dataListOfArrays.size()][dataList.size()];
@@ -166,13 +192,16 @@ public class MarkovChainListGenerator <E>
 		}*/
 		
 		// Fill out dataTimesRepeatedArray
-		for (int i = 0; i < correctedDataArrayList.size(); i++)
+		for (int i = 0; i < correctedDataArrayList.size() - order; i++)
 		{
-			for (int j = order; j < correctedDataList.size(); j++)
-			{
+			//for (int j = order; j < correctedDataList.size(); j++)
+			//{
 				ArrayList<E> arrayData = correctedDataArrayList.get(i);
-
-				E currentData = correctedDataList.get(i);
+if (i == 39)
+{
+	int test = 9;
+}
+				E currentData = correctedDataList.get(i + order);
 				
 				// previous index
 				int arrayIndex = dataListOfArrays.indexOf(arrayData);
@@ -180,8 +209,11 @@ public class MarkovChainListGenerator <E>
 				// current index
 				int currentIndex = dataList.indexOf(currentData);
 				
+				if(i == 52) {
+					int test = 1;}
+				
 				dataTimesRepeatedArray[arrayIndex][currentIndex] = dataTimesRepeatedArray[arrayIndex][currentIndex] + 1;
-			}
+			//}
 		}
 		
 		// create the total amount of data points in an array
@@ -395,7 +427,7 @@ public class MarkovChainListGenerator <E>
 		System.out.println("-----UNIT TEST DATA START-----");
 		System.out.println("-------TRANSITION TABLE-------");
 		
-		for (int i = 0; i < dataTimesRepeatedArray.length; i++)
+		for (int i = 0; i < dataList.size(); i++)
 		{
 			if (i == 0)
 			{
@@ -413,12 +445,14 @@ public class MarkovChainListGenerator <E>
 			{
 					if (j == 0)
 					{
-						System.out.print(dataList.get(i) + "|");
+						for (int m = 0; m < dataListOfArrays.get(i).size(); m++)
+						{
+							System.out.print("[" + dataListOfArrays.get(i).get(m) + "]");
+						}
+						System.out.print(" | ");
 					}
 					
 					System.out.print(dataChanceToAppear[i][j] + " ");
-
-				
 			}
 			
 			System.out.println("");
