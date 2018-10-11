@@ -31,28 +31,35 @@ public class PrintPitchesAndRhythmTest
 	
 	public void actualTest()
 	{
-		String path = getPath("../mid/Ambiguous.mid");
+		String path = getPath("../mid/MaryHadALittleLamb.mid");
 		
-		pitchMarkovGenerator = new MarkovChainListGenerator<Integer>(3);
-		rhythmMarkovGenerator = new MarkovChainListGenerator<Double>(3);
-		
-		//println(path);
-		
-		//playMidiFile(path);
+		//pitchMarkovGenerator = new MarkovChainListGenerator<Integer>(3);
+		//rhythmMarkovGenerator = new MarkovChainListGenerator<Double>(3);
+
 		midiNotes = new MidiFileToNotes(path);
 		midiNotes.setWhichLine(0); // change which channel we are grabbing notes from
 		midiNotes.processPitchesAsTokens();
+		//println(path);
 		
-		pitchMarkovGenerator.train(midiNotes.getPitchArray());
-		rhythmMarkovGenerator.train(midiNotes.getRhythmArray());
-		
-		pitchMarkovGenerator.generate(20);
-		rhythmMarkovGenerator.generate(20);
-		
-		System.out.println("Pitches: ");
-		pitchMarkovGenerator.printPitchesAndRhythm();
-		System.out.println('\n' + "Rhythm: ");
-		rhythmMarkovGenerator.printPitchesAndRhythm();
+		for (int i = 1; i <= 10; i++)
+		{
+			pitchMarkovGenerator.clearData();
+			rhythmMarkovGenerator.clearData();
+			
+			pitchMarkovGenerator.changeOrder(i);
+			rhythmMarkovGenerator.changeOrder(i);
+			
+			pitchMarkovGenerator.train(midiNotes.getPitchArray());
+			rhythmMarkovGenerator.train(midiNotes.getRhythmArray());
+			
+			pitchMarkovGenerator.generate(20);
+			rhythmMarkovGenerator.generate(20);
+			
+			System.out.println("Pitches: ");
+			pitchMarkovGenerator.printPitchesAndRhythm();
+			System.out.println('\n' + "Rhythm: ");
+			rhythmMarkovGenerator.printPitchesAndRhythm();
+		}
 	}
 	
 	String getPath(String filename)

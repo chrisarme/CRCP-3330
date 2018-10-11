@@ -34,13 +34,13 @@ public class PrintTransitionTablesTest
 		
 		//println(path);
 		
+		midiNotes = new MidiFileToNotes(path);
+		midiNotes.setWhichLine(0); // change which channel we are grabbing notes from
+		midiNotes.processPitchesAsTokens();
+		
 		for (int i = 1; i <= 10; i++)
 		{
 		//playMidiFile(path);
-			midiNotes = new MidiFileToNotes(path);
-			midiNotes.setWhichLine(0); // change which channel we are grabbing notes from
-			midiNotes.processPitchesAsTokens();
-			
 			pitchMarkovGenerator.clearData();
 			rhythmMarkovGenerator.clearData();
 			
