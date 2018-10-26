@@ -79,6 +79,9 @@ public class MarkovChainListGenerator <E>
 		 */
 		dataset = newDataSet;
 		
+		correctedDataList = new ArrayList<E>();
+		correctedDataArrayList = new ArrayList<>();
+		
 		//System.out.println(dataset.size());
 		
 		for (int i = 0; i < dataset.size(); i++)
@@ -109,6 +112,11 @@ public class MarkovChainListGenerator <E>
 			}
 			//System.out.println(String.valueOf(data));
 		//}
+		
+		if (order == 1)
+		{
+			int test = 4;
+		}
 		
 		//cooking mo' data
 		for (int i = order; i < correctedDataList.size(); i++)
@@ -197,10 +205,11 @@ public class MarkovChainListGenerator <E>
 			//for (int j = order; j < correctedDataList.size(); j++)
 			//{
 				ArrayList<E> arrayData = correctedDataArrayList.get(i);
-if (i == 39)
-{
-	int test = 9;
-}
+				
+				if (i == 40 - order)
+				{
+					int test = 9;
+				}
 				E currentData = correctedDataList.get(i + order);
 				
 				// previous index
@@ -208,9 +217,6 @@ if (i == 39)
 				
 				// current index
 				int currentIndex = dataList.indexOf(currentData);
-				
-				if(i == 52) {
-					int test = 1;}
 				
 				dataTimesRepeatedArray[arrayIndex][currentIndex] = dataTimesRepeatedArray[arrayIndex][currentIndex] + 1;
 			//}

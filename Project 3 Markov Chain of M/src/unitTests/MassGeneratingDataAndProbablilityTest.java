@@ -50,29 +50,38 @@ public class MassGeneratingDataAndProbablilityTest
 		midiNotes.setWhichLine(0); // change which channel we are grabbing notes from
 		midiNotes.processPitchesAsTokens();
 		
-		ArrayList<Integer> currentPitchArray = midiNotes.getPitchArray();
-		ArrayList<Double> currentRhythmArray = midiNotes.getRhythmArray();
+		for (int m = 1; m <= 10; m++)
+		{
 		
-		for (int i = 0; i < 10000; i++)
-		{		
-			pitchMarkovGenerator.clearData();
-			rhythmMarkovGenerator.clearData();
+			ArrayList<Integer> currentPitchArray = midiNotes.getPitchArray();
+			ArrayList<Double> currentRhythmArray = midiNotes.getRhythmArray();
 			
-			pitchMarkovGenerator.train(currentPitchArray);
-			rhythmMarkovGenerator.train(currentRhythmArray);
+			pitchMarkovGenerator.changeOrder(m);
+			rhythmMarkovGenerator.changeOrder(m);
 			
-			pitchMarkovGenerator.generate(20);
-			rhythmMarkovGenerator.generate(20);
+			pitchMarkovMasterGenerator.changeOrder(m);
+			rhythmMarkovMasterGenerator.changeOrder(m);
 			
-			pitchMarkovMasterGenerator.train(pitchMarkovGenerator.returnGeneratedArray());
-			rhythmMarkovMasterGenerator.train(rhythmMarkovGenerator.returnGeneratedArray());
+			for (int i = 0; i < 10000; i++)
+			{		
+				pitchMarkovGenerator.clearData();
+				rhythmMarkovGenerator.clearData();
+				
+				pitchMarkovGenerator.train(currentPitchArray);
+				rhythmMarkovGenerator.train(currentRhythmArray);
+				
+				pitchMarkovGenerator.generate(20);
+				rhythmMarkovGenerator.generate(20);
+				
+				pitchMarkovMasterGenerator.train(pitchMarkovGenerator.returnGeneratedArray());
+				rhythmMarkovMasterGenerator.train(rhythmMarkovGenerator.returnGeneratedArray());
+			}
+			
+			System.out.println("Pitches: ");
+			pitchMarkovMasterGenerator.printTransitionTable();
+			System.out.println('\n' + "Rhythm: ");
+			rhythmMarkovMasterGenerator.printTransitionTable();
 		}
-		
-		System.out.println("Pitches: ");
-		
-		pitchMarkovMasterGenerator.printTransitionTable();
-		System.out.println('\n' + "Rhythm: ");
-		rhythmMarkovMasterGenerator.printTransitionTable();
 	}
 	
 	String getPath(String filename)
