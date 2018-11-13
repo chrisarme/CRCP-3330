@@ -1,3 +1,4 @@
+// Chris Arme
 package mainSuffixTreePackage;
 
 import java.util.ArrayList;
@@ -8,6 +9,9 @@ public class PSTNode <E>
 	ArrayList<E> nodeData;
 	ArrayList<PSTNode> nodes;
 	
+	ArrayList<String> symbolsAfter;
+	ArrayList<Integer> symbolsCount;
+	
 	PSTNode(ArrayList<E> wordArray)
 	{
 		count = 1;
@@ -15,6 +19,7 @@ public class PSTNode <E>
 		nodes = new ArrayList<PSTNode>();
 	}
 	
+	//
 	boolean addNode(PSTNode<E> newNode)
 	{
 		boolean found = nodeData.equals(newNode.getData());
@@ -23,7 +28,7 @@ public class PSTNode <E>
 		if ((!found && isSuffix) || nodeData.size() == 0)
 		{
 			int i = 0;
-			while (i < nodes.size())
+			while (i < nodes.size() && !found)
 			{
 				found = nodes.get(i).addNode(newNode);
 				i++;
@@ -47,14 +52,66 @@ public class PSTNode <E>
 	{
 		if (nodeData.size() > 0)
 		{
-			E lastDataToCheck = dataToCheck.get(dataToCheck.size()-1);
+			//E lastDataToCheck = dataToCheck.get(dataToCheck.size()-1);
 			
-			return nodeData.get(nodeData.size()-1).equals(lastDataToCheck);
+			ArrayList<E> theDataToCheck = new ArrayList<E>();
+			
+			for (int i = nodeData.size(); i > 0; i--)
+			{
+				theDataToCheck.add(dataToCheck.get(dataToCheck.size() - i));
+			}
+			
+			return nodeData.equals(theDataToCheck);
 		}
 		else
 		{
 			return false;
 		}
+	}
+	
+	public void printNodes()
+	{
+		for (int i = 0; i < nodeData.size(); i++)
+		{
+			System.out.print("	");
+		}
+		
+		if (nodeData.size() > 0)
+		{
+			System.out.print("-->");
+		}
+		
+		System.out.println(nodeData);
+		
+		for (int i = 0; i < nodes.size(); i++)
+		{
+			nodes.get(i).printNodes();
+		}
+	}
+	
+	boolean pminEliminate(double pMin, int posToOccur)
+	{
+		boolean shouldEliminate = false;
+		
+		if ((count / posToOccur) <= pMin)
+		{
+			shouldEliminate = true;
+		}
+		
+		if (shouldEliminate == false || nodeData.size() <= 1)
+		{
+			for (int i = nodes.size() - 1; i >= 0; i--)
+			{
+				boolean eliminateChild = nodes.get(i).pminEliminate(pMin, posToOccur - 1);
+				
+				if (eliminateChild == true)
+				{
+					nodes.remove(i);
+				}
+			}
+		}
+		
+		return shouldEliminate;
 	}
 	
 	ArrayList<E> getData()
