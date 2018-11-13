@@ -5,20 +5,20 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import processing.core.*;
-import unitTests.UnitTest1;
-import unitTests.UnitTest2;
-import unitTests.UnitTest3;
-import unitTests.UnitTest4;
+import unitTests.PMinUnitTest1;
+import unitTests.PMinUnitTest2;
+import unitTests.PMinUnitTest3;
+import unitTests.PMinUnitTest4;
 
 public class Main extends PApplet{
 
 	static PST<String> pstTest = new PST<String>();
 	
 	// tests
-	UnitTest1 unitTest1 = new UnitTest1();
-	UnitTest2 unitTest2 = new UnitTest2();
-	UnitTest3 unitTest3 = new UnitTest3();
-	UnitTest4 unitTest4 = new UnitTest4();
+	PMinUnitTest1 unitTest1 = new PMinUnitTest1();
+	PMinUnitTest2 unitTest2 = new PMinUnitTest2();
+	PMinUnitTest3 unitTest3 = new PMinUnitTest3();
+	PMinUnitTest4 unitTest4 = new PMinUnitTest4();
 	
 	public static void main(String[] args) 
 	{

@@ -6,7 +6,7 @@ public class PST <E>
 {
 	PSTNode<E> root;
 	int length;
-	double pMin = .15;
+	float pMin = .15f;
 	
 	ArrayList<String> symbolsFound;
 	ArrayList<Integer> symbolsCount;
@@ -20,6 +20,13 @@ public class PST <E>
 	public PST(int l)
 	{
 		root = new PSTNode<E>(new ArrayList<>());
+		length = l;
+	}
+	
+	public PST(int l, float pMin)
+	{
+		root = new PSTNode<E>(new ArrayList<>());
+		this.pMin = pMin;
 		length = l;
 	}
 	
@@ -48,6 +55,11 @@ public class PST <E>
 	void beginPminEliminate(int dataSize)
 	{
 		root.pminEliminate(pMin, dataSize);
+	}
+	
+	void changePMin(float p)
+	{
+		pMin = p;
 	}
 	
 	public void printData()

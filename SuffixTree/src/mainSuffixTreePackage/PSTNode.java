@@ -3,6 +3,8 @@ package mainSuffixTreePackage;
 
 import java.util.ArrayList;
 
+import javafx.scene.chart.PieChart.Data;
+
 public class PSTNode <E>
 {
 	int count;
@@ -89,11 +91,21 @@ public class PSTNode <E>
 		}
 	}
 	
-	boolean pminEliminate(double pMin, int posToOccur)
+	boolean pminEliminate(float pMin, int posToOccur)
 	{
 		boolean shouldEliminate = false;
 		
-		if ((count / posToOccur) <= pMin)
+		if (nodeData.size() > 0)
+		{
+			if (nodeData.get(nodeData.size() - 1) == "a")
+			{
+				int test = 0;
+			}
+		}
+		
+		float pMinCheck = (float)count / (float)posToOccur;
+		
+		if (pMinCheck <= pMin)
 		{
 			shouldEliminate = true;
 		}
