@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import com.jaunt.JauntException;
 
@@ -45,7 +46,7 @@ public class TwitterBotMain extends PApplet {
 	public void setup() {
 		tweet = new TwitterInteraction(); 
 		
-		loadNovel("data/The Grand Sophy excerpt.txt"); //TODO: must train from another source
+		loadNovel("data/Manifesto.txt"); //TODO: must train from another source
 		println("Token size:"+tokens.size());
 
 		//TODO: train an AI algorithm (eg, Markov Chain) and generate text for markov chain status
@@ -59,8 +60,46 @@ public class TwitterBotMain extends PApplet {
 		}
 		
 		//Make sure within Twitter limits (used to be 140 but now is more?)
-		String status = "Hello, world -- I am a twitterbot!!";
-		tweet.updateTwitter(status);
+		//String status = "Hello, world -- I am a twitterbot!!";
+		
+		ArrayList<String> specialChar = new ArrayList<String>();
+		specialChar.add(" ");
+		specialChar.add(".");
+		specialChar.add(",");
+		
+		for (int i = 0; i < tokens.size(); i++)
+		{
+			
+			String status = "";
+			
+			while (status.length() < 250)
+			{
+				status += tokens.get(i);
+				
+				if (i < tokens.size() - 1)
+				{
+				
+					int isSpecialChar = specialChar.indexOf(tokens.get(i + 1));
+					if (isSpecialChar == -1)
+					{
+						status += " ";
+					}
+					
+					i++;
+				}
+			}
+			
+			status += " #equalityforall";
+			
+			tweet.updateTwitter(status);
+			
+			try {
+				TimeUnit.SECONDS.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 				
 		//prints the text content of the sites that come up with the google search of dogs
 		//you may use this content to train your AI too
@@ -110,7 +149,7 @@ public class TwitterBotMain extends PApplet {
 		String filePath = "";
 		try {
 			filePath = URLDecoder.decode(getClass().getResource(path).getPath(), "UTF-8");
-			filePath = filePath.substring(1, filePath.length()-1);
+			filePath = filePath.substring(1, filePath.length());
 
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
