@@ -9,11 +9,11 @@ import mainSuffixTreePackage.Main;
 import mainSuffixTreePackage.MidiFileToNotes;
 import mainSuffixTreePackage.PST;
 
-public class UnitTest4 
+public class PMinUnitTest4 
 {
 
-	PST<Integer> testPST1 = new PST<Integer>(3);
-	PST<Double> testPST2 = new PST<Double>(3);
+	PST<Integer> testPST1 = new PST<Integer>(3, .15f);
+	PST<Double> testPST2 = new PST<Double>(3, .15f);
 	
 	public void run() 
 	{
@@ -28,6 +28,22 @@ public class UnitTest4
 		ArrayList<Integer> currentPitchArray = midiNotes.getPitchArray();
 		ArrayList<Double> currentRhythmArray = midiNotes.getRhythmArray();
 
+		System.out.println("------- pMin = .15 -------");
+		
+		testPST1.addData(currentPitchArray);
+		testPST2.addData(currentRhythmArray);
+		
+		System.out.println("-----Pitch-----");
+		testPST1.printData();
+		
+		System.out.println("-----Rhythm-----");
+		testPST2.printData();
+		
+		System.out.println("------- pMin = .2 -------");
+		
+		PST<Integer> testPST1 = new PST<Integer>(3, .2f);
+		PST<Double> testPST2 = new PST<Double>(3, .2f);
+		
 		testPST1.addData(currentPitchArray);
 		testPST2.addData(currentRhythmArray);
 		

@@ -7,14 +7,21 @@ import java.util.Arrays;
 
 import mainSuffixTreePackage.PST;
 
-public class UnitTest1 
+public class PMinUnitTest1 
 {
 
-	PST<String> testPST = new PST<String>(3);
+	PST<String> testPST = new PST<String>(3, .15f);
 	
 	public void run() 
 	{
 		String[] word = {"a", "b", "r", "a", "c", "a", "d", "a", "b", "r", "a"};
+		
+		System.out.println("------- pMin = .15 -------");
+		testPST.addData(new ArrayList<String>(Arrays.asList(word)));
+		testPST.printData();
+		
+		System.out.println("------- pMin = .2 -------");
+		testPST = new PST<String>(3, .2f);
 		testPST.addData(new ArrayList<String>(Arrays.asList(word)));
 		testPST.printData();
 	}
