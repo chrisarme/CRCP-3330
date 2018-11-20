@@ -20,8 +20,8 @@ public class PrintTransitionTablesTest
 	MelodyPlayer player;
 	MidiFileToNotes midiNotes;
 	
-	MarkovChainListGenerator<Integer> pitchMarkovGenerator = new MarkovChainListGenerator<>(2);
-	MarkovChainListGenerator<Double> rhythmMarkovGenerator = new MarkovChainListGenerator<>(2);
+	MarkovChainListGenerator<Integer> pitchMarkovGenerator = new MarkovChainListGenerator<Integer>(2);
+	MarkovChainListGenerator<Double> rhythmMarkovGenerator = new MarkovChainListGenerator<Double>(2);
 	
 	/*private static void main() 
 	{	

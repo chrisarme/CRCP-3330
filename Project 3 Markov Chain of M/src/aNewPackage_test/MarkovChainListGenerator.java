@@ -79,96 +79,12 @@ public class MarkovChainListGenerator <E>
 		 */
 		dataset = newDataSet;
 		
-<<<<<<< HEAD
 		correctedDataList = new ArrayList<E>();
-		correctedDataArrayList = new ArrayList<>();
+		correctedDataArrayList = new ArrayList<ArrayList<E>>();
 		
 		//System.out.println(dataset.size());
 		
-		for (int i = 0; i < dataset.size(); i++)
-		{
-			E data = dataset.get(i);
-			//String dataString = data.toString();
-			
-			//cooking data
-			//if (Double.parseDouble(dataString) > 0)
-			//{
-				correctedDataList.add(data);
-				
-				int index = dataList.indexOf(data);
-				
-				//System.out.println(index);
-				
-				if (index == -1)
-				{
-					dataList.add(data);
-					dataTimesRepeated.add(1);
-					
-					//System.out.println("halp");
-				}
-				else
-				{
-					dataTimesRepeated.set(index, dataTimesRepeated.get(index) + 1);
-				}
-			}
-			//System.out.println(String.valueOf(data));
-		//}
-		
-		if (order == 1)
-		{
-			int test = 4;
-		}
-		
-		//cooking mo' data
-		for (int i = order; i < correctedDataList.size(); i++)
-		{
-			ArrayList<E> newArray = new ArrayList<E>();
-			
-			for (int m = order; m > 0; m--)
-			{
-				newArray.add(correctedDataList.get(i-m));
-			}
-			
-			correctedDataArrayList.add(newArray);
-			
-			int index = dataListOfArrays.indexOf(newArray);
-			
-			if (index == -1)
-			{
-				dataListOfArrays.add(newArray);
-				dataArrayTimesRepeated.add(1);
-			}
-			else
-			{
-				dataArrayTimesRepeated.set(index, dataArrayTimesRepeated.get(index) + 1);
-			}
-		}
-		
-		//final data
-		
-		ArrayList<E> newArray = new ArrayList<E>();
-		
-		for (int m = order; m > 0; m--)
-		{
-			newArray.add(correctedDataList.get(correctedDataList.size()-m));
-		}
-		
-		correctedDataArrayList.add(newArray);
-		
-		int index = dataListOfArrays.indexOf(newArray);
-		
-		if (index == -1)
-		{
-			dataListOfArrays.add(newArray);
-			dataArrayTimesRepeated.add(1);
-		}
-		else
-		{
-			dataArrayTimesRepeated.set(index, dataArrayTimesRepeated.get(index) + 1);
-		}
-=======
 		prepareData();
->>>>>>> 64ad3f8576be1b154ec89a5b90dd2047428a13ee
 		
 		//we are actually training
 		dataChanceToAppear = new Float[dataListOfArrays.size()][dataList.size()];
@@ -192,18 +108,6 @@ public class MarkovChainListGenerator <E>
 		}
 		
 		// Fill out dataTimesRepeatedArray
-		/*for (int i = 0; i < correctedDataList.size() - 1; i++)
-		{
-			E currentData = correctedDataList.get(i);
-			E nextData = correctedDataList.get(i + 1);
-			
-			int currentIndex = dataList.indexOf(currentData);
-			int nextIndex = dataList.indexOf(nextData);
-			
-			dataTimesRepeatedArray[currentIndex][nextIndex] = dataTimesRepeatedArray[currentIndex][nextIndex] + 1;
-		}*/
-		
-		// Fill out dataTimesRepeatedArray
 		for (int i = 0; i < correctedDataArrayList.size() - order; i++)
 		{
 			//for (int j = order; j < correctedDataList.size(); j++)
@@ -214,10 +118,7 @@ public class MarkovChainListGenerator <E>
 				{
 					int test = 9;
 				}
-<<<<<<< HEAD
-=======
-				
->>>>>>> 64ad3f8576be1b154ec89a5b90dd2047428a13ee
+
 				E currentData = correctedDataList.get(i + order);
 				
 				// previous index
@@ -225,11 +126,7 @@ public class MarkovChainListGenerator <E>
 				
 				// current index
 				int currentIndex = dataList.indexOf(currentData);
-<<<<<<< HEAD
-				
-=======
 
->>>>>>> 64ad3f8576be1b154ec89a5b90dd2047428a13ee
 				dataTimesRepeatedArray[arrayIndex][currentIndex] = dataTimesRepeatedArray[arrayIndex][currentIndex] + 1;
 			//}
 		}
@@ -311,9 +208,9 @@ public class MarkovChainListGenerator <E>
 				boolean createdData = false;
 				int j = 0;
 				
-				for (int m = order; m >= 0; m--)
+				for (int m = order; m > 0; m--)
 				{
-					generation.add(generatedData.get(generatedData.size() - 1 - m));
+					generation.add(generatedData.get(generatedData.size() - m));
 				}
 				
 				int index = dataListOfArrays.indexOf(generation);
@@ -354,7 +251,7 @@ public class MarkovChainListGenerator <E>
 			}
 			else
 			{
-				for (int m = 0; m <= order; m++)
+				for (int m = 0; m < order; m++)
 				{
 					generatedData.add(dataset.get(m));
 				}

@@ -9,30 +9,36 @@ public class PSTNode <E>
 {
 	int count;
 	ArrayList<E> nodeData;
-	ArrayList<PSTNode> nodes;
+	ArrayList<PSTNode<E>> nodes;
 	
-	ArrayList<String> symbolsAfter;
+	ArrayList<ArrayList<E>> symbolsAfter;
 	ArrayList<Integer> symbolsCount;
+	
+	boolean isSymbolAtEnd;
+	E symbolAtEnd;
 	
 	PSTNode(ArrayList<E> wordArray)
 	{
 		count = 1;
 		nodeData = wordArray;
-		nodes = new ArrayList<PSTNode>();
+		nodes = new ArrayList<PSTNode<E>>();
 	}
 	
 	//
-	boolean addNode(PSTNode<E> newNode)
+	boolean addNode(PSTNode<E> newNode, ArrayList <E> mainData, int positionOfCurrentData)
 	{
 		boolean found = nodeData.equals(newNode.getData());
 		boolean isSuffix = isSuffix(newNode.getData());
+		
+		//newNode.symbolsAfter = symbolsAfter;
+		//newNode.symbolsCount = symbolsCount;
 		
 		if ((!found && isSuffix) || nodeData.size() == 0)
 		{
 			int i = 0;
 			while (i < nodes.size() && !found)
 			{
-				found = nodes.get(i).addNode(newNode);
+				found = nodes.get(i).addNode(newNode, mainData, positionOfCurrentData);
 				i++;
 			}
 			
@@ -124,6 +130,50 @@ public class PSTNode <E>
 		}
 		
 		return shouldEliminate;
+	}
+	
+	boolean rEliminate(float r)
+	{
+		boolean shouldEliminate = false;
+		
+		if (nodeData.size() > 0)
+		{
+			if (nodeData.get(nodeData.size() - 1) == "a")
+			{
+				int test = 0;
+			}
+		}
+		
+		// FIX
+		float rCheck = (float)count / 1;
+		
+		if (rCheck <= r)
+		{
+			shouldEliminate = true;
+		}
+		
+		if (shouldEliminate == false || nodeData.size() <= 1)
+		{
+			for (int i = nodes.size() - 1; i >= 0; i--)
+			{
+				boolean eliminateChild = nodes.get(i).rEliminate(123 - 1);
+				
+				if (eliminateChild == true)
+				{
+					nodes.remove(i);
+				}
+			}
+		}
+		
+		return shouldEliminate;
+	}
+	
+	void addToSymbols(ArrayList<E> symbolData)
+	{
+		if (isSuffix(symbolData))
+		{
+			
+		}
 	}
 	
 	ArrayList<E> getData()

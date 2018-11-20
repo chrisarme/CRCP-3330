@@ -1,5 +1,6 @@
-<<<<<<< HEAD
-/data/
-=======
 /.DS_Store
->>>>>>> 65a95a1788dfd1001addd5d650fe0e45009bce05
+/Scraper.class
+/TextTokenizer.class
+/TwitterBotMain.class
+/TwitterInteraction.class
+/data/

@@ -7,8 +7,9 @@ public class PST <E>
 	PSTNode<E> root;
 	int length;
 	float pMin = .15f;
+	float r = .2f;
 	
-	ArrayList<String> symbolsFound;
+	ArrayList<ArrayList<E>> symbolsFound;
 	ArrayList<Integer> symbolsCount;
 	
 	public PST()
@@ -23,10 +24,11 @@ public class PST <E>
 		length = l;
 	}
 	
-	public PST(int l, float pMin)
+	public PST(int l, float pMin, float r)
 	{
 		root = new PSTNode<E>(new ArrayList<>());
 		this.pMin = pMin;
+		this.r = r;
 		length = l;
 	}
 	
@@ -45,16 +47,34 @@ public class PST <E>
 					data.add(array.get(p + i));
 				}
 				
-				root.addNode(new PSTNode<E>(data));
+				int symbolPos = symbolsFound.indexOf(data);
+				
+				if (symbolPos != -1)
+				{
+					symbolsCount.set(symbolPos, symbolsCount.get(symbolPos) + 1);
+				}
+				else
+				{
+					symbolsFound.add(data);
+					symbolsCount.add(1);
+				}
+				
+				root.addNode(new PSTNode<E>(data), array, p);
 			}
 		}
 		
 		beginPminEliminate(array.size());
+		beginREliminate();
 	}
 	
 	void beginPminEliminate(int dataSize)
 	{
 		root.pminEliminate(pMin, dataSize);
+	}
+	
+	void beginREliminate()
+	{
+		root.rEliminate(r);
 	}
 	
 	void changePMin(float p)

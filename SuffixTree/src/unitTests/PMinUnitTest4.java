@@ -12,8 +12,8 @@ import mainSuffixTreePackage.PST;
 public class PMinUnitTest4 
 {
 
-	PST<Integer> testPST1 = new PST<Integer>(3, .15f);
-	PST<Double> testPST2 = new PST<Double>(3, .15f);
+	PST<Integer> testPST1 = new PST<Integer>(3, .15f, .2f);
+	PST<Double> testPST2 = new PST<Double>(3, .15f, .2f);
 	
 	public void run() 
 	{
@@ -41,8 +41,8 @@ public class PMinUnitTest4
 		
 		System.out.println("------- pMin = .2 -------");
 		
-		PST<Integer> testPST1 = new PST<Integer>(3, .2f);
-		PST<Double> testPST2 = new PST<Double>(3, .2f);
+		PST<Integer> testPST1 = new PST<Integer>(3, .2f, .2f);
+		PST<Double> testPST2 = new PST<Double>(3, .2f, .2f);
 		
 		testPST1.addData(currentPitchArray);
 		testPST2.addData(currentRhythmArray);
