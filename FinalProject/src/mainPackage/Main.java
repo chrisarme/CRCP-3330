@@ -1,0 +1,75 @@
+package mainPackage;
+
+import processing.core.*;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+public class Main extends PApplet
+{
+
+	ArrayList<ArrayList<String>> wordData = new ArrayList<ArrayList<String>>();
+	
+	public static void main(String[] args) 
+	{
+		PApplet.main("mainPackage.Main");
+		
+	}
+	
+	public void settings()
+	{
+		size(600, 600);
+	}
+	
+	public void setup()
+	{
+		loadNovel("data/StressDoc.txt");
+	}
+	
+	void loadNovel(String p) 
+	{
+		String filePath = getPath(p);
+		Path path = Paths.get(filePath);
+		wordData = new ArrayList<ArrayList<String>>();
+
+		try 
+		{
+			List<String> lines = Files.readAllLines(path);
+
+			for (int i = 0; i < lines.size(); i++) 
+			{
+				for (int j = 0; j < lines.get(i).length(); j++)
+				{
+					 
+				}
+			}
+
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			//println("Oopsie! We had a problem reading a file!");
+		}
+	}
+	
+	
+	String getPath(String path) {
+
+		String filePath = "";
+		try {
+			filePath = URLDecoder.decode(getClass().getResource(path).getPath(), "UTF-8");
+			filePath = filePath.substring(1, filePath.length());
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return filePath;
+	}
+
+}
