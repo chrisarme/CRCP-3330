@@ -16,12 +16,18 @@ public class PST <E>
 	{
 		root = new PSTNode<E>(new ArrayList<>());
 		length = 1;
+		
+		symbolsFound = new ArrayList<ArrayList<E>>();
+		symbolsCount = new ArrayList<Integer>();
 	}
 	
 	public PST(int l)
 	{
 		root = new PSTNode<E>(new ArrayList<>());
 		length = l;
+		
+		symbolsFound = new ArrayList<ArrayList<E>>();
+		symbolsCount = new ArrayList<Integer>();
 	}
 	
 	public PST(int l, float pMin, float r)
@@ -30,6 +36,9 @@ public class PST <E>
 		this.pMin = pMin;
 		this.r = r;
 		length = l;
+		
+		symbolsFound = new ArrayList<ArrayList<E>>();
+		symbolsCount = new ArrayList<Integer>();
 	}
 	
 	public void addData(ArrayList<E> array)

@@ -10,6 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.jaunt.JauntException;
 
+import markovChain.MarkovChainListGenerator;
+
 //This class serves as a template for creating twitterbots and demonstrates string tokenizing and web scraping and the use of the 
 //twitter API
 public class TwitterBotMain extends PApplet {
@@ -28,6 +30,13 @@ public class TwitterBotMain extends PApplet {
 	//example twitter hastag search term
 	private static final String fPASSIVEAGG = "passiveaggressive";
 	private static final String fCOMMA = ","; 
+	
+	
+	
+	// AI part
+	int order = 1;
+	
+	MarkovChainListGenerator<String> markovChainGenerator = new MarkovChainListGenerator<String>(order);
 	
 	//handles twitter api
 	TwitterInteraction tweet; 
@@ -67,12 +76,19 @@ public class TwitterBotMain extends PApplet {
 		specialChar.add(".");
 		specialChar.add(",");
 		
-		for (int i = 0; i < tokens.size(); i++)
+		ArrayList<String> lastWords = new ArrayList<String>();
+		
+		for (int i = 0; i < order; i++)
+		{
+			lastWords.add(tokens.get(i));
+		}
+		
+		for (int i = 0; i < 10; i++)
 		{
 			
 			String status = "";
 			
-			while (status.length() < 250)
+			/*while (status.length() < 250)
 			{
 				status += tokens.get(i);
 				
@@ -87,6 +103,26 @@ public class TwitterBotMain extends PApplet {
 					
 					i++;
 				}
+			}*/
+			
+			status = "";
+			
+			markovChainGenerator = new MarkovChainListGenerator<>(order);
+			markovChainGenerator.train(tokens);
+			markovChainGenerator.generate(20, lastWords);
+			
+			ArrayList<String> generatedStatus = markovChainGenerator.returnGeneratedArray();
+			
+			lastWords = new ArrayList<String>();
+			
+			for (int o = order; o >= 0; o--)
+			{
+				lastWords.add(generatedStatus.get(generatedStatus.size() - 1 - o));
+			}
+			
+			for (int s = 0; s < generatedStatus.size(); s++)
+			{
+				status += generatedStatus.get(s) + " ";
 			}
 			
 			status += " #equalityforall";

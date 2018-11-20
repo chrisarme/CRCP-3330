@@ -22,6 +22,9 @@ public class PSTNode <E>
 		count = 1;
 		nodeData = wordArray;
 		nodes = new ArrayList<PSTNode<E>>();
+		
+		symbolsAfter = new ArrayList<ArrayList<E>>();
+		symbolsCount = new ArrayList<Integer>();
 	}
 	
 	//
@@ -149,7 +152,7 @@ public class PSTNode <E>
 		
 		if (rCheck <= r)
 		{
-			shouldEliminate = true;
+			shouldEliminate = false;
 		}
 		
 		if (shouldEliminate == false || nodeData.size() <= 1)
