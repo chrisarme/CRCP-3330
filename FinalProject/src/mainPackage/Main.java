@@ -1,6 +1,9 @@
 package mainPackage;
 
 import processing.core.*;
+import com.github.jreddit.*;
+import mainPackage.MarkovChainListGenerator;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
@@ -15,10 +18,11 @@ public class Main extends PApplet
 
 	ArrayList<ArrayList<String>> wordData = new ArrayList<ArrayList<String>>();
 	
+	MarkovChainListGenerator<String> markovGenerator = new MarkovChainListGenerator<>(1);
+	
 	public static void main(String[] args) 
 	{
 		PApplet.main("mainPackage.Main");
-		
 	}
 	
 	public void settings()
@@ -28,7 +32,7 @@ public class Main extends PApplet
 	
 	public void setup()
 	{
-		loadNovel("data/StressDoc.txt");
+		loadNovel("../data/StressDoc.txt");
 	}
 	
 	void loadNovel(String p) 
@@ -43,9 +47,15 @@ public class Main extends PApplet
 
 			for (int i = 0; i < lines.size(); i++) 
 			{
-				for (int j = 0; j < lines.get(i).length(); j++)
+				if (!lines.get(i).isEmpty() && lines.get(i) != " ")
 				{
-					 
+					wordData.add(new ArrayList<String>());
+					
+					String[] lineWords = lines.get(i).split(" ");
+					for (int j = 0; j < lineWords.length; j++)
+					{
+						wordData.get(wordData.size() - 1).add(lineWords[j]);
+					}
 				}
 			}
 
@@ -55,6 +65,18 @@ public class Main extends PApplet
 			e.printStackTrace();
 			//println("Oopsie! We had a problem reading a file!");
 		}
+		
+		for (int i = 0; i < wordData.size(); i++)
+		{
+			println(wordData.get(i));
+			
+			markovGenerator.train(wordData.get(i));
+		}
+		
+		markovGenerator.generate(50);
+		
+		println("");
+		println(markovGenerator.returnGeneratedArray());
 	}
 	
 	
