@@ -5,30 +5,32 @@ package mainPackage;
 
 import java.util.ArrayList;
 
-public class MarkovChainListGenerator <E>
+public class MarkovChainListGenerator
 {
 	int order;
 	
-	ArrayList<E> dataset;
+	boolean firstRun = true;
 	
-	ArrayList<E> dataList = new ArrayList<E>(); 
-	ArrayList<ArrayList<E>> dataListOfArrays = new ArrayList<ArrayList<E>>();
-	ArrayList<E> correctedDataList = new ArrayList<E>();
-	ArrayList<ArrayList<E>> correctedDataArrayList = new ArrayList<ArrayList<E>>();
+	ArrayList<String> dataset;
+	
+	ArrayList<String> dataList = new ArrayList<String>(); 
+	ArrayList<ArrayList<String>> dataListOfArrays = new ArrayList<ArrayList<String>>();
+	ArrayList<String> correctedDataList = new ArrayList<String>();
+	ArrayList<ArrayList<String>> correctedDataArrayList = new ArrayList<ArrayList<String>>();
 	ArrayList<Integer> dataTimesRepeated = new ArrayList<Integer>();
 	ArrayList<Integer> dataArrayTimesRepeated = new ArrayList<Integer>();
 	
 	// Transition Table
-	Integer[][] dataTimesRepeatedArray = new Integer[0][0];
+	ArrayList<ArrayList<Integer>> dataTimesRepeatedArray = new ArrayList<ArrayList<Integer>>();
 
-	Float[][] dataChanceToAppear = new Float[0][0];
+	ArrayList<ArrayList<Float>> dataChanceToAppear = new ArrayList<ArrayList<Float>>();
 	ArrayList<Double> dataSumToAppear = new ArrayList<Double>();
-	Float[][] dataSumToAppearArray = new Float[0][0];
+	ArrayList<ArrayList<Float>> dataSumToAppearArray = new ArrayList<ArrayList<Float>>();
 	
-	Float[] singleDataChanceToAppear = new Float[0];
-	Float[] singleDataSumToAppear = new Float[0];
+	ArrayList<Float> singleDataChanceToAppear = new ArrayList<Float>();
+	ArrayList<Float> singleDataSumToAppear = new ArrayList<Float>();
 	
-	ArrayList<E> generatedData = new ArrayList<E>();
+	ArrayList<String> generatedData = new ArrayList<String>();
 	
 	public MarkovChainListGenerator()
 	{
@@ -47,25 +49,25 @@ public class MarkovChainListGenerator <E>
 	
 	public void clearData()
 	{
-		dataList = new ArrayList<E>();
-		dataListOfArrays = new ArrayList<ArrayList<E>>();
+		dataList = new ArrayList<String>();
+		dataListOfArrays = new ArrayList<ArrayList<String>>();
 		
-		correctedDataList = new ArrayList<E>();
-		correctedDataArrayList = new ArrayList<ArrayList<E>>();
+		correctedDataList = new ArrayList<String>();
+		correctedDataArrayList = new ArrayList<ArrayList<String>>();
 		dataTimesRepeated = new ArrayList<Integer>();
 		dataArrayTimesRepeated = new ArrayList<Integer>();
-		dataChanceToAppear = new Float[0][0];
-		dataTimesRepeatedArray = new Integer[0][0];
+		dataChanceToAppear = new ArrayList<ArrayList<Float>>();
+		dataTimesRepeatedArray = new ArrayList<ArrayList<Integer>>();
 		dataSumToAppear = new ArrayList<Double>();
-		dataSumToAppearArray = new Float[0][0];
+		dataSumToAppearArray = new ArrayList<ArrayList<Float>>();
 		
-		singleDataChanceToAppear = new Float[0];
-		singleDataSumToAppear = new Float[0];
+		singleDataChanceToAppear = new ArrayList<Float>();
+		singleDataSumToAppear = new ArrayList<Float>();
 		
-		generatedData = new ArrayList<E>();
+		generatedData = new ArrayList<String>();
 	}
 	
-	public void train(ArrayList<E> newDataSet)
+	public void train(ArrayList<String> newDataSet)
 	{
 		/*
 		 # The statespace
@@ -79,31 +81,75 @@ public class MarkovChainListGenerator <E>
 		 */
 		dataset = newDataSet;
 		
-		correctedDataList = new ArrayList<E>();
-		correctedDataArrayList = new ArrayList<ArrayList<E>>();
+		correctedDataList = new ArrayList<String>();
+		correctedDataArrayList = new ArrayList<ArrayList<String>>();
 		
 		//System.out.println(dataset.size());
 		
 		prepareData();
 		
 		//we are actually training
-		dataChanceToAppear = new Float[dataListOfArrays.size()][dataList.size()];
-		dataTimesRepeatedArray = new Integer[dataListOfArrays.size()][dataList.size()];
-		dataSumToAppearArray = new Float[dataListOfArrays.size()][dataList.size()];
+	
 		
-		singleDataChanceToAppear = new Float[dataList.size()];
-		singleDataSumToAppear = new Float[dataList.size()];
 		
-		for (int i = 0; i < dataListOfArrays.size(); i++)
+		if (firstRun)
 		{
-			for (int j = 0; j < dataList.size(); j++)
+			firstRun = false;
+			
+			//dataChanceToAppear = new Float[dataListOfArrays.size()][dataList.size()];
+			//dataTimesRepeatedArray = new Integer[dataListOfArrays.size()][dataList.size()];
+			//dataSumToAppearArray = new Float[dataListOfArrays.size()][dataList.size()];
+			
+			//singleDataChanceToAppear = new Float[dataList.size()];
+			//singleDataSumToAppear = new Float[dataList.size()];
+			
+			for (int i = 0; i < dataListOfArrays.size(); i++)
 			{
-				dataChanceToAppear[i][j] = 0f;
-				dataTimesRepeatedArray[i][j] = 0;
-				dataSumToAppearArray[i][j] = 0f;
+				dataChanceToAppear.add(new ArrayList<Float>());
+				dataTimesRepeatedArray.add(new ArrayList<Integer>());
+				dataSumToAppearArray.add(new ArrayList<Float>());
 				
-				singleDataChanceToAppear[j] = 0f;
-				singleDataSumToAppear[j] = 0f;
+				for (int j = 0; j < dataList.size(); j++)
+				{
+					dataChanceToAppear.get(i).add(0f);
+					dataTimesRepeatedArray.get(i).add(0);
+					dataSumToAppearArray.get(i).add(0f);
+					
+					singleDataChanceToAppear.add(0f);
+					singleDataSumToAppear.add(0f);
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < dataChanceToAppear.size(); i++)
+			{		
+				for (int j = dataChanceToAppear.get(i).size(); j < dataList.size(); j++)
+				{
+					dataChanceToAppear.get(i).add(0f);
+					dataTimesRepeatedArray.get(i).add(0);
+					dataSumToAppearArray.get(i).add(0f);
+					
+					singleDataChanceToAppear.add(0f);
+					singleDataSumToAppear.add(0f);
+				}
+			}
+			
+			for (int i = dataChanceToAppear.size(); i < dataListOfArrays.size(); i++)
+			{
+				dataChanceToAppear.add(new ArrayList<Float>());
+				dataTimesRepeatedArray.add(new ArrayList<Integer>());
+				dataSumToAppearArray.add(new ArrayList<Float>());
+				
+				for (int j = 0; j < dataList.size(); j++)
+				{
+					dataChanceToAppear.get(i).add(0f);
+					dataTimesRepeatedArray.get(i).add(0);
+					dataSumToAppearArray.get(i).add(0f);
+					
+					singleDataChanceToAppear.add(0f);
+					singleDataSumToAppear.add(0f);
+				}
 			}
 		}
 		
@@ -112,14 +158,14 @@ public class MarkovChainListGenerator <E>
 		{
 			//for (int j = order; j < correctedDataList.size(); j++)
 			//{
-				ArrayList<E> arrayData = correctedDataArrayList.get(i);
+				ArrayList<String> arrayData = correctedDataArrayList.get(i);
 				
 				if (i == 40 - order)
 				{
 					int test = 9;
 				}
 
-				E currentData = correctedDataList.get(i + order);
+				String currentData = correctedDataList.get(i + order);
 				
 				// previous index
 				int arrayIndex = dataListOfArrays.indexOf(arrayData);
@@ -127,22 +173,24 @@ public class MarkovChainListGenerator <E>
 				// current index
 				int currentIndex = dataList.indexOf(currentData);
 
-				dataTimesRepeatedArray[arrayIndex][currentIndex] = dataTimesRepeatedArray[arrayIndex][currentIndex] + 1;
+				ArrayList<Integer> test = dataTimesRepeatedArray.get(arrayIndex);
+				
+				dataTimesRepeatedArray.get(arrayIndex).set(currentIndex, dataTimesRepeatedArray.get(arrayIndex).get(currentIndex) + 1);
 			//}
 		}
 		
 		// create the total amount of data points in an array
-		Integer[] dataPointTotal = new Integer[dataTimesRepeatedArray.length];
+		Integer[] dataPointTotal = new Integer[dataTimesRepeatedArray.size()];
 		Integer singleDataPointTotal = 0;
 		
-		for (int i = 0; i < dataTimesRepeatedArray.length; i++)
+		for (int i = 0; i < dataTimesRepeatedArray.size(); i++)
 		{
 			int dataTotal = 0;
 			int singleDataTotal = 0;
 			
 			for (int j = 0; j < dataList.size(); j++)
 			{
-				dataTotal += dataTimesRepeatedArray[i][j];
+				dataTotal += dataTimesRepeatedArray.get(i).get(j);
 				singleDataTotal += dataTimesRepeated.get(j);
 			}
 			
@@ -150,57 +198,64 @@ public class MarkovChainListGenerator <E>
 			singleDataPointTotal = singleDataTotal;
 		}
 		
+		int test = 0;
 		
 		// dataChanceToAppear creation
-		for (int i = 0; i < dataChanceToAppear.length; i++)
+		for (int i = 0; i < dataChanceToAppear.size(); i++)
 		{
 			float lastSum = 0;
 			float singleLastSum = 0;
 			
 			if (order == 2)
 			{
-				int test = 2;
+				int test2 = 2;
 			}
 			
-			for (int j = 0; j < dataChanceToAppear[i].length; j++)
+			for (int j = 0; j < dataChanceToAppear.get(i).size(); j++)
 			{
 				if (dataPointTotal[i] > 0)
 				{
-					dataChanceToAppear[i][j] = ( (float) dataTimesRepeatedArray[i][j] / (float) dataPointTotal[i]);
+					dataChanceToAppear.get(i).set(j, ( (float) dataTimesRepeatedArray.get(i).get(j) / (float) dataPointTotal[i]));
 					
 					
-					if (dataChanceToAppear[i][j] != 0f)
+					float number = dataChanceToAppear.get(i).get(j);
+					
+					if (dataChanceToAppear.get(i).get(j) != 0f)
 					{
-						dataSumToAppearArray[i][j] = dataChanceToAppear[i][j] + lastSum;
-						lastSum += dataChanceToAppear[i][j];
+						ArrayList<Integer> ababaaba = dataTimesRepeatedArray.get(i);
+						
+						dataSumToAppearArray.get(i).set(j, dataChanceToAppear.get(i).get(j) + lastSum);
+						lastSum += dataChanceToAppear.get(i).get(j);
 					}
 					else
 					{
-						dataSumToAppearArray[i][j] = -1f;
+						dataSumToAppearArray.get(i).set(j, -1f);
 					}
 				}
 				else
 				{
-					dataSumToAppearArray[i][j] = -1f;
+					dataSumToAppearArray.get(i).set(j, -1f);
 				}
 			}
 		}
 		
 		float singleLastSum = 0;
 
-		for (int i = 0; i < singleDataChanceToAppear.length; i++)
+		/*for (int i = 0; i < singleDataChanceToAppear.length; i++)
 		{
 			singleDataChanceToAppear[i] = ((float) dataTimesRepeated.get(i) / (float) singleDataPointTotal);
 			singleDataSumToAppear[i] = singleDataChanceToAppear[i] + singleLastSum;
 			singleLastSum += singleDataChanceToAppear[i];
-		}
+		}*/
 	}
 	
 	public void generate(int sizeOfGeneration)
 	{	
+		generatedData = new ArrayList<String>();
+		
 		for (int i = order; i < sizeOfGeneration; i++)
 		{
-			ArrayList<E> generation = new ArrayList<E>();
+			ArrayList<String> generation = new ArrayList<String>();		
 			
 			if (i != order)
 			{
@@ -216,9 +271,9 @@ public class MarkovChainListGenerator <E>
 				int index = dataListOfArrays.indexOf(generation);
 				if (index != -1)
 				{
-					while (j < dataSumToAppearArray[index].length && createdData == false)
+					while (j < dataSumToAppearArray.get(index).size() && createdData == false)
 					{	
-						if ((randomNum <= dataSumToAppearArray[index][j] && dataSumToAppearArray[index][j] != -1f) || dataSumToAppearArray[index][j] == 1f)
+						if ((randomNum <= dataSumToAppearArray.get(index).get(j) && dataSumToAppearArray.get(index).get(j) != -1f) || dataSumToAppearArray.get(index).get(j) == 1f)
 						{
 							generatedData.add(dataList.get(j));
 							//System.out.println("Stopping here");
@@ -230,7 +285,7 @@ public class MarkovChainListGenerator <E>
 				}
 				else
 				{
-					while (j < singleDataSumToAppear.length && createdData == false)
+					/*while (j < singleDataSumToAppear.size() && createdData == false)
 					{
 						if (randomNum <= singleDataSumToAppear[j] || singleDataSumToAppear[j] == 1f)
 						{
@@ -239,7 +294,7 @@ public class MarkovChainListGenerator <E>
 						}
 						
 						j++;
-					}
+					}*/
 				}
 				
 				// This should only happen if the note being check is the last note in the original song. For now, we will add the first note to start the generation again
@@ -265,7 +320,8 @@ public class MarkovChainListGenerator <E>
 	{
 		for (int i = 0; i < dataset.size(); i++)
 		{
-			E data = dataset.get(i);
+			String data = dataset.get(i).toString();
+			data = data.replaceAll("[^a-zA-Z0-9\\.\\,\\'\\’]", "");
 
 			correctedDataList.add(data);
 			
@@ -286,11 +342,16 @@ public class MarkovChainListGenerator <E>
 		//cooking mo' data
 		for (int i = order; i < dataset.size(); i++)
 		{
-			ArrayList<E> newArray = new ArrayList<E>();
+			ArrayList<String> newArray = new ArrayList<String>();
 			
 			for (int m = order; m > 0; m--)
 			{
 				newArray.add(dataset.get(i-m));
+			}
+			
+			for (int a = 0; a < newArray.size(); a++)
+			{
+				newArray.set(a, newArray.get(a).replaceAll("[^a-zA-Z0-9\\.\\,\\'\\’]", ""));
 			}
 			
 			correctedDataArrayList.add(newArray);
@@ -308,11 +369,16 @@ public class MarkovChainListGenerator <E>
 		}
 		
 		//final data
-		ArrayList<E> newArray = new ArrayList<E>();
+		ArrayList<String> newArray = new ArrayList<String>();
 		
 		for (int m = order; m > 0; m--)
 		{
 			newArray.add(correctedDataList.get(correctedDataList.size()-m));
+		}
+		
+		for (int a = 0; a < newArray.size(); a++)
+		{
+			newArray.set(a, newArray.get(a).replaceAll("[^a-zA-Z0-9\\.\\,\\'\\’]", ""));
 		}
 		
 		correctedDataArrayList.add(newArray);
@@ -329,7 +395,7 @@ public class MarkovChainListGenerator <E>
 		}
 	}
 	
-	public ArrayList<E> returnGeneratedArray()
+	public ArrayList<String> returnGeneratedArray()
 	{
 		return generatedData;
 	}
@@ -372,9 +438,9 @@ public class MarkovChainListGenerator <E>
 		
 		System.out.println("");
 		
-		for (int i = 0; i < dataTimesRepeatedArray.length; i++)
+		for (int i = 0; i < dataTimesRepeatedArray.size(); i++)
 		{
-			for (int j = 0; j < dataTimesRepeatedArray[i].length; j++)
+			for (int j = 0; j < dataTimesRepeatedArray.get(i).size(); j++)
 			{
 					if (j == 0)
 					{
@@ -385,7 +451,7 @@ public class MarkovChainListGenerator <E>
 						System.out.print(" | ");
 					}
 					
-					System.out.print(dataChanceToAppear[i][j] + " ");
+					System.out.print(dataChanceToAppear.get(i).get(j) + " ");
 			}
 			
 			System.out.println("");

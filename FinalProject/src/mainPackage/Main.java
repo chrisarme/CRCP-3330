@@ -18,7 +18,13 @@ public class Main extends PApplet
 
 	ArrayList<ArrayList<String>> wordData = new ArrayList<ArrayList<String>>();
 	
-	MarkovChainListGenerator<String> markovGenerator = new MarkovChainListGenerator<>(1);
+	MarkovChainListGenerator markovGenerator = new MarkovChainListGenerator(1);
+	
+	ArrayList<String> generatedMarkovText = new ArrayList<String>();
+	ArrayList<Float> textYPos = new ArrayList<Float>();
+	ArrayList<Float> textXPos = new ArrayList<Float>();
+	ArrayList<Boolean> textDirection = new ArrayList<Boolean>();
+	ArrayList<Float> textSpeed = new ArrayList<Float>();
 	
 	public static void main(String[] args) 
 	{
@@ -32,7 +38,72 @@ public class Main extends PApplet
 	
 	public void setup()
 	{
+		background(100);
+		
 		loadNovel("../data/StressDoc.txt");
+		
+		for (int i = 0; i < 10; i++)
+		{
+			markovGenerator.generate(50);
+			generatedMarkovText.add(returnMarkovString());
+			textYPos.add((float) (Math.random() * height));
+			
+			textSpeed.add((float) Math.random());
+			
+			
+			double randNum = Math.random();
+			
+			if (randNum > .5)
+			{
+				textDirection.add(true);
+			}
+			else
+			{
+				textDirection.add(false);
+			}
+			
+			if (textDirection.get(i) == true)
+			{
+				//textXPos.add((int) (300 + (Math.random() * 50) * Math.sin(Math.random() * Math.PI)));
+				textXPos.add((float) (-600 + (Math.random() * 50) * Math.sin(Math.random() * Math.PI)));
+			}
+			else
+			{
+				textXPos.add((float) (600 + (Math.random() * 50) * Math.sin(Math.random() * Math.PI)));
+			}
+		}
+		
+		for (int i = 0; i < generatedMarkovText.size(); i++)
+		{
+			text(generatedMarkovText.get(i), textXPos.get(i), textYPos.get(i));
+		}
+	}
+	
+	public void update()
+	{
+		for (int i = 0; i < generatedMarkovText.size(); i++)
+		{
+			if (textDirection.get(i) == true)
+			{
+				textXPos.set(i, textXPos.get(i) + textSpeed.get(i));
+			}
+			else
+			{
+				textXPos.set(i, textXPos.get(i) - textSpeed.get(i));
+			}
+		}
+	}
+	
+	public void draw()
+	{
+		background(100);
+		
+		for (int i = 0; i < generatedMarkovText.size(); i++)
+		{
+			text(generatedMarkovText.get(i), textXPos.get(i), textYPos.get(i));
+		}
+		
+		update();
 	}
 	
 	void loadNovel(String p) 
@@ -77,6 +148,26 @@ public class Main extends PApplet
 		
 		println("");
 		println(markovGenerator.returnGeneratedArray());
+	}
+	
+	String returnMarkovString()
+	{
+		String markovString = "";
+		ArrayList<String> returnedArray = markovGenerator.returnGeneratedArray();
+		
+		for (int i = 0; i < returnedArray.size(); i++)
+		{
+			if (i < returnedArray.size() - 1)
+			{
+				markovString += returnedArray.get(i) + " ";
+			}
+			else
+			{
+				markovString += returnedArray.get(i);
+			}
+		}
+		
+		return markovString;
 	}
 	
 	
