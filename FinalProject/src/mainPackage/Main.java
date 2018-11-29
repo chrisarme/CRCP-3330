@@ -34,7 +34,8 @@ public class Main extends PApplet
 	
 	public void settings()
 	{
-		size(600, 600);
+		//size(600, 600);
+		fullScreen();
 	}
 	
 	public void setup()
@@ -89,10 +90,33 @@ public class Main extends PApplet
 			if (textDirection.get(i) == true)
 			{
 				textXPos.set(i, textXPos.get(i) + textSpeed.get(i));
+				if (textXPos.get(i) > width)
+				{
+					textSize.set(i, (float) ((Math.random() * 30) + 10));
+					textSize(textSize.get(i));
+					
+					markovGenerator.generate(50);
+					generatedMarkovText.set(i, returnMarkovString());
+					textYPos.set(i, (float) (Math.random() * height));
+					textXPos.set(i, -50 - textWidth(generatedMarkovText.get(i)));
+					textSpeed.set(i, (float) (Math.random() * 2) + .5f);
+				}
 			}
 			else
 			{
+				textSize(textSize.get(i));
 				textXPos.set(i, textXPos.get(i) - textSpeed.get(i));
+				if (textXPos.get(i) < -textWidth(generatedMarkovText.get(i)))
+				{
+					textSize.set(i, (float) ((Math.random() * 30) + 10));
+					textSize(textSize.get(i));
+					
+					markovGenerator.generate(50);
+					generatedMarkovText.set(i, returnMarkovString());
+					textYPos.set(i, (float) (Math.random() * height));
+					textXPos.set(i, (float) width + 50);
+					textSpeed.set(i, (float) (Math.random() * 2) + .5f);
+				}
 			}
 		}
 	}
@@ -171,7 +195,16 @@ public class Main extends PApplet
 			}
 		}
 		
-		return markovString;
+		int lastDot = markovString.lastIndexOf('.');
+		if (lastDot != -1 || lastDot != markovString.length())
+		{
+			String correctedString = markovString.substring(0, lastDot + 1);
+			return correctedString;
+		}
+		else
+		{
+			return markovString;
+		}
 	}
 	
 	
@@ -187,6 +220,11 @@ public class Main extends PApplet
 			e.printStackTrace();
 		}
 		return filePath;
+	}
+	
+	void fillStressedWords(ArrayList<String> baseString)
+	{
+		
 	}
 
 }
