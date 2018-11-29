@@ -25,6 +25,7 @@ public class Main extends PApplet
 	ArrayList<Float> textXPos = new ArrayList<Float>();
 	ArrayList<Boolean> textDirection = new ArrayList<Boolean>();
 	ArrayList<Float> textSpeed = new ArrayList<Float>();
+	ArrayList<Float> textSize = new ArrayList<Float>();
 	
 	public static void main(String[] args) 
 	{
@@ -47,12 +48,12 @@ public class Main extends PApplet
 			markovGenerator.generate(50);
 			generatedMarkovText.add(returnMarkovString());
 			textYPos.add((float) (Math.random() * height));
-			
-			textSpeed.add((float) Math.random());
-			
+			textSpeed.add((float) (Math.random() * 3));
+			textSize.add((float) ((Math.random() * 30) + 10));
 			
 			double randNum = Math.random();
 			
+			// set the direction that the text will move
 			if (randNum > .5)
 			{
 				textDirection.add(true);
@@ -62,19 +63,21 @@ public class Main extends PApplet
 				textDirection.add(false);
 			}
 			
+			// sets base position of the text based on the direction of movement
 			if (textDirection.get(i) == true)
 			{
 				//textXPos.add((int) (300 + (Math.random() * 50) * Math.sin(Math.random() * Math.PI)));
-				textXPos.add((float) (-600 + (Math.random() * 50) * Math.sin(Math.random() * Math.PI)));
+				textXPos.add((float) (-600 + (Math.random() * 100) * Math.sin(Math.random() * Math.PI)));
 			}
 			else
 			{
-				textXPos.add((float) (600 + (Math.random() * 50) * Math.sin(Math.random() * Math.PI)));
+				textXPos.add((float) (600 + (Math.random() * 100) * Math.sin(Math.random() * Math.PI)));
 			}
 		}
 		
 		for (int i = 0; i < generatedMarkovText.size(); i++)
 		{
+			textSize(textSize.get(i));
 			text(generatedMarkovText.get(i), textXPos.get(i), textYPos.get(i));
 		}
 	}
@@ -100,6 +103,7 @@ public class Main extends PApplet
 		
 		for (int i = 0; i < generatedMarkovText.size(); i++)
 		{
+			textSize(textSize.get(i));
 			text(generatedMarkovText.get(i), textXPos.get(i), textYPos.get(i));
 		}
 		
