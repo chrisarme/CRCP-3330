@@ -48,7 +48,7 @@ public class Main extends PApplet
 			markovGenerator.generate(50);
 			generatedMarkovText.add(returnMarkovString());
 			textYPos.add((float) (Math.random() * height));
-			textSpeed.add((float) (Math.random() * 3));
+			textSpeed.add((float) (Math.random() * 2) + .5f);
 			textSize.add((float) ((Math.random() * 30) + 10));
 			
 			double randNum = Math.random();
